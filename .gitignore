@@ -1,5 +1,6 @@
-# Directory for the latest modules
-/modules
+# Track the modules directory but ignore its contents
+/modules/*
+!/modules/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
