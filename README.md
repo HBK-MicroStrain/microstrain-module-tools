@@ -38,7 +38,7 @@ Modules currently have to be copied over manually. Automatic module fetching is 
 For now, copy any new modules into the `modules/` folder and reload the session:
 
 ```python
->>> reload()
+reload()
 ```
 
 This reloads the openDAQ instance and picks up any newly added modules.
@@ -48,6 +48,6 @@ This reloads the openDAQ instance and picks up any newly added modules.
 This code snippet will display a list of all currently available devices:
 
 ```python
->>> for device_info in instance.available_devices:
+for device_info in instance.available_devices:
 ...     print("Name:", device_info.name, "Connection string:", device_info.connection_string)
 ```

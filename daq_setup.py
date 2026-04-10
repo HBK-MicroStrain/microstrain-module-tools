@@ -7,7 +7,7 @@ MODULE_PATH = str(pathlib.Path(__file__).parent / "modules")
 
 def _create_instance():
     builder = daq.InstanceBuilder()
-    builder.add_module_path(MODULE_PATH)
+    builder.module_path = MODULE_PATH
     return builder.build()
 
 def reload():
