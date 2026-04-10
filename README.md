@@ -45,6 +45,8 @@ This reloads the openDAQ instance and picks up any newly added modules.
 
 ### Discovering devices
 
+This code snippet will display a list of all currently available devices:
+
 ```python
 >>> for device_info in instance.available_devices:
 ...     print("Name:", device_info.name, "Connection string:", device_info.connection_string)
