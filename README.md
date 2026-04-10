@@ -1,4 +1,5 @@
 # Opendaq Module Validation
+
 Interactive Python environment for validating openDAQ modules.
 
 ## Setup
@@ -15,7 +16,6 @@ scripts/setup.bat
 Run the start script. This will open an interactive Python session with the openDAQ instance already initialized and ready to use.
 
 **Windows**
-
 ```
 scripts/start.bat
 ```
@@ -27,7 +27,7 @@ The following variables are available in the session:
 - `daq` — the openDAQ python module
 - `instance` — the openDAQ Instance with the loaded openDAQ module(s)
 
-See the [example code](https://docs.opendaq.com/manual/opendaq/3.30/tutorials/quick_start_setting_up_python.html) for reference.
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
 
 ### Adding modules
 
@@ -40,3 +40,10 @@ For now, copy any new modules into the `modules/` folder and reload the session:
 ```
 
 This reloads the openDAQ instance and picks up any newly added modules.
+
+### Discovering devices
+
+```python
+>>> for device_info in instance.available_devices:
+...     print("Name:", device_info.name, "Connection string:", device_info.connection_string)
+```
