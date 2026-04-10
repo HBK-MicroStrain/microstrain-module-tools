@@ -22,12 +22,14 @@ scripts/start.bat
 
 ## Usage
 
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
+
 The following variables are available in the session:
 
 - `daq` — the openDAQ python module
 - `instance` — the openDAQ Instance with the loaded openDAQ module(s)
 
-See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
+See the [example code](https://docs.opendaq.com/manual/opendaq/3.30/tutorials/quick_start_setting_up_python.html#_testing_the_installation) for an example of these variables.
 
 ### Adding modules
 
