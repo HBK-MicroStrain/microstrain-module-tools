@@ -59,7 +59,7 @@ This code snippet will display a list of all currently available devices:
 
 ```python
 for device_info in instance.available_devices:
-    print("Name:", device_info.name, "Connection string:", device_info.connection_string)
+    print('Name:', device_info.name, 'Connection string:', device_info.connection_string)
 ```
 
 ### Adding devices
@@ -86,14 +86,14 @@ If that fails, try powering the node off and then back on again. This should fix
 Properties are organized into `groups`. To get a list of all available property groups for a channel, run:
 
 ```python
-for propery in channel.visible_properties:
-    print(propery.name)
+for group in channel.visible_properties:
+    print(group.name)
 ```
 
 You can then get a reference to the group:
 
 ```python
-prop_group = channel.get_property_value("[GROUP]")
+prop_group = channel.get_property_value('[GROUP]')
 ```
 
 where, `[GROUP]` is a property group name from the query above.
@@ -104,13 +104,13 @@ Individual properties can be accessed once you have a reference to a their group
 
 ```python
 # Get the current timeout
-timeout = prop_group.get_property_value("LostBeaconTimeout")
+timeout = prop_group.get_property_value('LostBeaconTimeout')
 
 # Print the property value
-print(f"Lost beacon timeout value: {timeout}")
+print(f'Lost beacon timeout value: {timeout}')
 
 # Set a new timeout
-prop_group.set_property_value("LostBeaconTimeout", 7)
+prop_group.set_property_value('LostBeaconTimeout', 7)
 ```
 
 ### Calling function properties
@@ -118,7 +118,7 @@ prop_group.set_property_value("LostBeaconTimeout", 7)
 The easiest way to call function properties is using the wrapper:
 
 ```python
-result = call_function(prop_group, "[NAME]")
+result = call_function(prop_group, '[NAME]')
 ```
 
 where, `[NAME]` is the name of the function property to call.
