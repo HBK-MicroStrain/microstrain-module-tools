@@ -64,9 +64,49 @@ for device_info in instance.available_devices:
 
 ### Adding devices
 
-Add a device using it's connection string. For example:
+Wireless base stations are represented as a device. Add one using it's connection string. For example:
 ```python
 device = instance.add_device('microstrain-wireless://COM46:3000000')
 ```
 
 Connection strings are in the format: `prefix://address`.
+
+### Getting channels
+
+Wireless nodes are represented as channels. Channels can be retrieved once there is a reference to a device. For example, to get the first channel for a device:
+
+```python
+channel = device.get_channels()[0]
+```
+
+### Querying available properties
+
+Properties are organized into `groups`. To get a list of all available property groups for a channel, run:
+
+```python
+for propery in channel.visible_properties:
+    print(propery.name)
+```
+
+You can then get a reference to the group:
+
+```python
+prop_group = channel.get_property_value("[GROUP]")
+```
+
+where, `[GROUP]` is a property group name from the query above.
+
+### Accessing properties
+
+Individual properties can be accessed once you have a reference to a their group. For example, to get the lost beacon timeout property:
+
+```python
+# Get the current timeout
+timeout = prop_group.get_property_value("LostBeaconTimeout")
+
+# Print the property value
+print(f"Lost beacon timeout value: {timeout}")
+
+# Set a new timeout
+prop_group.set_property_value("LostBeaconTimeout", 7)
+```
