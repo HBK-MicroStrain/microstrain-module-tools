@@ -100,17 +100,29 @@ where, `[GROUP]` is a property group name from the query above.
 
 ### Accessing properties
 
-Individual properties can be accessed once you have a reference to a their group. For example, to get the lost beacon timeout property:
+Individual properties can be accessed once you know their group. This can be done in two ways:
+
+```python
+# Recommended: using the dot notation on the channel
+channel.get_property_value('[GROUP].[PROPERTY]')
+
+# Using a reference to the property group
+prop_group.get_property_value('[PROPERTY]')
+```
+
+where, `[PROPERTY]` is the name of the individual property to be accessed. Dot notation is the recommended approach, and will be used for the rest of this document.
+
+For example, to get the lost beacon timeout property:
 
 ```python
 # Get the current timeout
-timeout = prop_group.get_property_value('LostBeaconTimeout')
+timeout = channel.get_property_value('Config.LostBeaconTimeout')
 
 # Print the property value
 print(f'Lost beacon timeout value: {timeout}')
 
 # Set a new timeout
-prop_group.set_property_value('LostBeaconTimeout', 7)
+channel.set_property_value('Config.LostBeaconTimeout', 7)
 ```
 
 ### Calling function properties
