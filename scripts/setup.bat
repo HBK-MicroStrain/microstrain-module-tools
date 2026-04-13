@@ -1,5 +1,10 @@
 @echo off
 
+if exist .venv (
+    echo Removing existing virtual environment.
+    rmdir /s /q .venv
+)
+
 echo Setting up virtual environment.
 python -m venv .venv
 
