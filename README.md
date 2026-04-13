@@ -112,3 +112,5 @@ print(f"Lost beacon timeout value: {timeout}")
 # Set a new timeout
 prop_group.set_property_value("LostBeaconTimeout", 7)
 ```
+
+### Calling function properties
