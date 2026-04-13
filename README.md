@@ -2,6 +2,8 @@
 
 Interactive Python environment for validating openDAQ modules.
 
+This tool exposes the programmatic interface for working with openDAQ modules. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
+
 ## Setup
 
 Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies automatically.
