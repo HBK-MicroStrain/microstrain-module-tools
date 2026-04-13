@@ -79,7 +79,7 @@ When you are ready to remove the device, run:
 instance.remove_device(device)
 ```
 
-This will disconnect the device so you can use it in other applications, such as `SensorConnect`
+This will disconnect the device so you can use it in other applications, such as `SensorConnect`.
 
 ### Getting channels
 
