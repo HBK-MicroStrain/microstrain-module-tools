@@ -8,7 +8,12 @@ Run the setup script after cloning the repo. This will create a virtual environm
 
 **Windows**
 ```
-scripts/setup.bat
+scripts\setup.bat
+```
+
+**Linux/Mac**
+```
+./scripts/setup.sh
 ```
 
 ## Running a Session
@@ -17,7 +22,12 @@ Run the start script. This will open an interactive Python session with the open
 
 **Windows**
 ```
-scripts/start.bat
+scripts\start.bat
+```
+
+**Linux/Mac**
+```
+./scripts/start.sh
 ```
 
 ## Usage
