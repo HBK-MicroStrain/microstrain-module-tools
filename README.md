@@ -79,6 +79,8 @@ Wireless nodes are represented as channels. Channels can be retrieved once there
 channel = device.get_channels()[0]
 ```
 
+If that fails, try powering the node off and then back on again. This should fix the issue. If commands can no longer be entered in the interactive terminal, press `Enter` one or two times.
+
 ### Querying available properties
 
 Properties are organized into `groups`. To get a list of all available property groups for a channel, run:
