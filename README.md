@@ -114,3 +114,18 @@ prop_group.set_property_value("LostBeaconTimeout", 7)
 ```
 
 ### Calling function properties
+
+The easiest way to call function properties is using the wrapper:
+
+```python
+result = call_function(prop_group, "[NAME]")
+```
+
+where, `[NAME]` is the name of the function property to call.
+
+The result object can then be queried for any returned properties. For example:
+
+```python
+# Did the function execute properly?
+result.get_property_value('Success')
+```
