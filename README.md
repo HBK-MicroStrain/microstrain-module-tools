@@ -71,6 +71,16 @@ device = instance.add_device('microstrain-wireless://COM46:3000000')
 
 Connection strings are in the format: `prefix://address`.
 
+### Removing devices
+
+When you are ready to remove the device, run:
+
+```python
+instance.remove_device(device)
+```
+
+This will disconnect the device so you can use it in other applications, such as `SensorConnect`
+
 ### Getting channels
 
 Wireless nodes are represented as channels. Channels can be retrieved once there is a reference to a device. For example, to get the first channel for a device:
