@@ -61,3 +61,12 @@ This code snippet will display a list of all currently available devices:
 for device_info in instance.available_devices:
     print("Name:", device_info.name, "Connection string:", device_info.connection_string)
 ```
+
+### Adding devices
+
+Add a device using it's connection string. For example:
+```python
+device = instance.add_device('microstrain-wireless://COM46:3000000')
+```
+
+Connection strings are in the format: `prefix://address`.
