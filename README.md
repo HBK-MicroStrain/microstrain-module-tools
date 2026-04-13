@@ -96,7 +96,8 @@ You can then get a reference to the group:
 prop_group = channel.get_property_value('[GROUP]')
 ```
 
-where, `[GROUP]` is a property group name from the query above.
+where:
+ * `[GROUP]` is a property group name from the query above.
 
 ### Accessing properties
 
@@ -110,9 +111,12 @@ channel.get_property_value('[GROUP].[PROPERTY]')
 prop_group.get_property_value('[PROPERTY]')
 ```
 
-where, `[PROPERTY]` is the name of the individual property to be accessed. Dot notation is the recommended approach, and will be used for the rest of this document.
+where:
+ * `[PROPERTY]` is the name of the individual property to be accessed.
 
-For example, to get the lost beacon timeout property:
+Dot notation is the recommended approach, and will be used for the rest of this document.
+
+For example, to get and set the lost beacon timeout property:
 
 ```python
 # Get the current timeout
