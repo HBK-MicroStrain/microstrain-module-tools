@@ -19,25 +19,31 @@ def reload():
     instance = _create_instance()
     print("Session reloaded.")
 
-def call_function(group, name):
+def call_function(root, path):
     """Call an openDAQ function property and return its result.
 
     This function handles casting to a callable automatically.
 
     Args:
-        group: The openDAQ property object (group) containing the function property.
-        name: The name of the function property to call.
+        root: The root openDAQ property object to start from.
+        path: The name or dot-notation path from the root to the function property.
 
     Returns:
         The result returned by the function property, typically a PropertyObject.
 
     Raises:
-        RuntimeError: If the property does not exist or cannot be cast to IFunction.
+        RuntimeError: If the property does not exist or cannot be cast properly.
 
     Example:
-        result = call_function(prop_group, "Apply")
+        # Recommended: using dot notation from the channel
+        result = call_function(channel, "Config.Apply")
+
+        # Using a reference to the property group
+        result = call_function(config_group, "Apply")
+
+        # Query the result
         print(result.get_property_value("Success"))
     """
-    return daq.IFunction.cast_from(group.get_property_value(name))()
+    return daq.IFunction.cast_from(root.get_property_value(path))()
 
 instance = _create_instance()

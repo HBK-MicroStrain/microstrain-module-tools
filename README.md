@@ -130,10 +130,18 @@ channel.set_property_value('Config.LostBeaconTimeout', 7)
 The easiest way to call function properties is using the wrapper:
 
 ```python
-result = call_function(prop_group, '[NAME]')
+result = call_function([ROOT], '[PATH]')
 ```
 
-where, `[NAME]` is the name of the function property to call.
+where:
+*  `[ROOT]` is a reference to the property object containing the property
+*  `[PATH]` is the name or dot notation path from root to the function property to call.
+
+For example:
+
+```python
+result = call_function(channel, "Config.Apply")
+```
 
 The result object can then be queried for any returned properties. For example:
 
