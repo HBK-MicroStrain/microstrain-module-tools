@@ -93,7 +93,7 @@ channel = device.get_channels()[0]
 
 If that fails, try powering the node off and then back on again. This should fix the issue. If commands can no longer be entered in the interactive terminal, press `Enter` one or two times.
 
-### Querying available properties
+### Querying available property groups
 
 Properties are organized into `groups`. To get a list of all available property groups for a channel, run:
 
@@ -111,9 +111,18 @@ prop_group = channel.get_property_value('[GROUP]')
 where:
  * `[GROUP]` is a property group name from the query above.
 
-### Accessing properties
+### Querying properties within a group
 
-Individual properties can be accessed once you know their group. This can be done in two ways:
+To get a list of all available properties within a group, run:
+
+```python
+for prop in channel.get_property_value('[GROUP]').visible_properties:
+    print(prop.name)
+```
+
+### Accessing individual properties
+
+Individual properties can be accessed from their group. This can be done in two ways:
 
 ```python
 # Recommended: using the dot notation on the channel
