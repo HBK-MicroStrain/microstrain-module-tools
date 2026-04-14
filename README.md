@@ -117,7 +117,15 @@ To get a list of all available properties within a group, run:
 
 ```python
 for prop in channel.get_property_value('[GROUP]').visible_properties:
-    print(prop.name)
+    print(prop.name, '|', prop.value_type)
+```
+
+This will print the property name and its type, for example:
+
+```
+LostBeaconTimeout | CoreType.ctInt
+Apply | CoreType.ctFunc
+EnableChannel | CoreType.ctBool
 ```
 
 ### Accessing individual properties
