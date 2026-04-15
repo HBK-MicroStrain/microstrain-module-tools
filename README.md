@@ -109,7 +109,7 @@ Connection strings are in the format: `prefix://address`.
 
 ### Removing devices
 
-When you are ready to remove the device, run:
+When you are ready to remove the device:
 
 ```python
 instance.remove_device(device)
