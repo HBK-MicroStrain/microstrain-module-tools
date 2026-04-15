@@ -121,9 +121,9 @@ print_group_properties(channel, '[GROUP]')
 This will print the property name and its type. For example:
 
 ```
-Property          | Type  
+Property          | Type
 ------------------+-------
-LostBeaconTimeout | ctInt 
+LostBeaconTimeout | ctInt
 Apply             | ctFunc
 EnableChannel     | ctBool
 ```
@@ -159,7 +159,7 @@ prop_group.get_property_value('[PROPERTY]')
 where:
  * `[PROPERTY]` is the name of the individual property to be accessed.
 
-Dot notation is the recommended approach, and will be used for the rest of this document.
+**NOTE:** Dot notation is the recommended approach, and will be used for the rest of this document.
 
 For example, to get and set the lost beacon timeout property:
 
