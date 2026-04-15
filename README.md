@@ -144,6 +144,21 @@ Config | Apply             | ctFunc
 Config | EnableChannel     | ctBool
 ```
 
+### Finding a property path
+
+If you know a property name but not which group it belongs to, use `find_property` to get its full dot-notation path:
+
+```python
+find_property(channel, '[PROPERTY]')
+```
+
+For example:
+
+```python
+find_property(channel, 'LostBeaconTimeout')
+# => 'Config.LostBeaconTimeout'
+```
+
 ### Accessing individual properties
 
 Individual properties can be accessed from their group. This can be done in two ways:

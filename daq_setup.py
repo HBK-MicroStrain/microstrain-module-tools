@@ -46,6 +46,29 @@ def call_function(root, path):
     """
     return daq.IFunction.cast_from(root.get_property_value(path))()
 
+def find_property(channel, name):
+    """Returns the full dot-notation path of a property given its name.
+
+    Searches all groups and top-level properties on the channel.
+    Returns 'Property not found' if no matching property is found.
+
+    Args:
+        channel: The openDAQ channel to search.
+        name: The property name to search for.
+
+    Example:
+        find_property(channel, 'LostBeaconTimeout')
+        # => 'Config.LostBeaconTimeout'
+    """
+    for prop in channel.visible_properties:
+        if prop.value_type == daq.CoreType.ctObject:
+            for child in channel.get_property_value(prop.name).visible_properties:
+                if child.name == name:
+                    return f'{prop.name}.{name}'
+        elif prop.name == name:
+            return name
+    return 'Property not found'
+
 def print_property_groups(channel):
     """Prints all property groups available on a channel.
 
