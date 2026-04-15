@@ -20,7 +20,7 @@ def reload():
     print("Session reloaded.")
 
 def call_function(root, path):
-    """Call an openDAQ function property and return its result.
+    """Calls an openDAQ function property and return its result.
 
     This function handles casting to a callable automatically.
 
@@ -45,5 +45,33 @@ def call_function(root, path):
         print(result.get_property_value("Success"))
     """
     return daq.IFunction.cast_from(root.get_property_value(path))()
+
+def print_channel_properties(channel):
+    """Prints all available properties for a channel, regardless of group.
+
+    Outputs in the following format:
+        Group Name | Property Name | Property Type
+
+    Args:
+        channel: The openDAQ channel to query properties from.
+    """
+    # Builds a list of tuples in the format: (group name, property name, property type)
+    rows = [
+        (group.name, prop.name, str(prop.value_type))
+        for group in channel.visible_properties
+        for prop in channel.get_property_value(group.name).visible_properties
+    ]
+
+    # Computes the width of the widest entry in each of the columns, at least as wide as the header
+    headers = ('Group', 'Property', 'Type')
+    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(3)]
+
+    # Display header row
+    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}} | {headers[2]:<{col_widths[2]}}')
+    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}-+-{"-" * col_widths[2]}')
+
+    # Display rows
+    for row in rows:
+        print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}} | {row[2]:<{col_widths[2]}}')
 
 instance = _create_instance()

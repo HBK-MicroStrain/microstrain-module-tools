@@ -111,7 +111,7 @@ prop_group = channel.get_property_value('[GROUP]')
 where:
  * `[GROUP]` is a property group name from the query above.
 
-### Querying properties within a group
+### Querying available properties
 
 To get a list of all available properties within a group, run:
 
@@ -120,12 +120,28 @@ for prop in channel.get_property_value('[GROUP]').visible_properties:
     print(prop.name, '|', prop.value_type)
 ```
 
-This will print the property name and its type, for example:
+This will print the property name and its type. For example:
 
 ```
 LostBeaconTimeout | CoreType.ctInt
 Apply | CoreType.ctFunc
 EnableChannel | CoreType.ctBool
+```
+
+To print all properties for a channel across every group at once, run:
+
+```python
+print_channel_properties(channel)
+```
+
+This will print the group, property name, and type for every property. For example:
+
+```
+Group  | Property          | Type           
+-------+-------------------+----------------
+Config | LostBeaconTimeout | CoreType.ctInt 
+Config | Apply             | CoreType.ctFunc
+Config | EnableChannel     | CoreType.ctBool
 ```
 
 ### Accessing individual properties
