@@ -20,8 +20,9 @@ import daq_utils
 daq_utils.print_channel_properties(channel)
 ```
 
-See [Usage](#usage) for more examples.
+**NOTE:** This is only for importing the library into a separate project. This is handled automatically by the interactive prototyping tool.
 
+See [Usage](#usage) for more examples.
 ### Interactive Prototyping Tool
 This tool provides a pre-configured Python session with an openDAQ instance ready to use out of the box — ideal for exploration, prototyping, and testing.
 
