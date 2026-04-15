@@ -53,8 +53,37 @@ def print_property_groups(channel):
         channel: The openDAQ channel to query property groups from.
     """
     for prop in channel.visible_properties:
+        # Some top-level properties are not groups. We only want to print the groups.
         if prop.value_type == daq.CoreType.ctObject:
             print(prop.name)
+
+def print_group_properties(channel, group):
+    """Prints all properties within a group for a channel as an aligned table.
+
+    Args:
+        channel: The openDAQ channel to query properties from.
+        group: The name of the property group to query.
+
+    Example:
+        print_group_properties(channel, 'Config')
+    """
+    # Builds a list of tuples in the format: (property name, property type)
+    rows = [
+        (prop.name, str(prop.value_type).split('CoreType.')[-1])
+        for prop in channel.get_property_value(group).visible_properties
+    ]
+
+    # Computes the width of the widest entry in each of the columns, at least as wide as the header
+    headers = ('Property', 'Type')
+    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
+
+    # Display header row
+    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
+    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
+
+    # Display rows
+    for row in rows:
+        print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
 
 def print_channel_properties(channel):
     """Prints all properties available on a channel, regardless of group.

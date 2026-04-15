@@ -115,16 +115,17 @@ where:
 To get a list of all available properties within a group, run:
 
 ```python
-for prop in channel.get_property_value('[GROUP]').visible_properties:
-    print(prop.name, '|', prop.value_type)
+print_group_properties(channel, '[GROUP]')
 ```
 
 This will print the property name and its type. For example:
 
 ```
-LostBeaconTimeout | CoreType.ctInt
-Apply | CoreType.ctFunc
-EnableChannel | CoreType.ctBool
+Property          | Type  
+------------------+-------
+LostBeaconTimeout | ctInt 
+Apply             | ctFunc
+EnableChannel     | ctBool
 ```
 
 To print all properties for a channel across every group at once, run:
