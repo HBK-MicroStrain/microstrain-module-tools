@@ -11,6 +11,8 @@ These tools are for working with openDAQ programmatically. For interfacing throu
 
 `daq_utils` is a library that simplifies working with openDAQ through extensions tailored for MicroStrain modules.
 
+**NOTE:** This is only for importing the library into a separate project. This is handled automatically by the interactive prototyping tool.
+
 To use the library, import it into your project:
 
 ```python
@@ -20,9 +22,8 @@ import daq_utils
 daq_utils.print_channel_properties(channel)
 ```
 
-**NOTE:** This is only for importing the library into a separate project. This is handled automatically by the interactive prototyping tool.
-
 See [Usage](#usage) for more examples.
+
 ### Interactive Prototyping Tool
 This tool provides a pre-configured Python session with an openDAQ instance ready to use out of the box — ideal for exploration, prototyping, and testing.
 
@@ -128,7 +129,7 @@ If that fails, try powering the node off and then back on again. This should fix
 
 ### Querying available property groups
 
-Most properties are organized into `groups`. To get a list of all available property groups for a channel, run:
+Most properties are organized into `groups`. To get a list of all available property groups for a channel:
 
 ```python
 daq_utils.print_property_groups(channel)
@@ -145,7 +146,7 @@ where:
 
 ### Querying available properties
 
-To get a list of all available properties within a group, run:
+To get a list of all available properties within a group:
 
 ```python
 daq_utils.print_group_properties(channel, '[GROUP]')
@@ -161,7 +162,7 @@ Apply             | ctFunc
 EnableChannel     | ctBool
 ```
 
-To print all properties for a channel across every group at once, run:
+To print all properties for a channel across every group at once:
 
 ```python
 daq_utils.print_channel_properties(channel)
@@ -175,6 +176,34 @@ Group  | Property          | Type
 Config | LostBeaconTimeout | ctInt
 Config | Apply             | ctFunc
 Config | EnableChannel     | ctBool
+```
+
+### Querying function properties
+
+To inspect a function property's description, return type, and arguments:
+
+```python
+daq_utils.describe_function(channel, '[PATH]')
+```
+
+For example:
+
+```python
+daq_utils.describe_function(channel, 'Features.MaxSweeps')
+```
+
+This will print the function's description, return type, and an aligned table of its arguments:
+
+```
+Description: Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration
+Returns:     ctObject
+
+Argument     | Type
+-------------+--------------
+samplingMode | ctEnumeration
+dataMode     | ctEnumeration
+dataFormat   | ctEnumeration
+channelMask  | ctInt
 ```
 
 ### Finding a property path
