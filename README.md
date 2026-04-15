@@ -98,8 +98,7 @@ If that fails, try powering the node off and then back on again. This should fix
 Most properties are organized into `groups`. To get a list of all available property groups for a channel, run:
 
 ```python
-for group in channel.visible_properties:
-    print(group.name)
+print_property_groups(channel)
 ```
 
 You can then get a reference to the group:

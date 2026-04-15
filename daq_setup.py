@@ -46,8 +46,18 @@ def call_function(root, path):
     """
     return daq.IFunction.cast_from(root.get_property_value(path))()
 
+def print_property_groups(channel):
+    """Prints all property groups available on a channel.
+
+    Args:
+        channel: The openDAQ channel to query property groups from.
+    """
+    for prop in channel.visible_properties:
+        if prop.value_type == daq.CoreType.ctObject:
+            print(prop.name)
+
 def print_channel_properties(channel):
-    """Prints all available properties for a channel, regardless of group.
+    """Prints all properties available on a channel, regardless of group.
 
     Outputs in the following format:
         Group Name | Property Name | Property Type
