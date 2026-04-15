@@ -1,10 +1,29 @@
-# Opendaq Module Validation
+# MicroStrain Module Tools
 
-Interactive Python environment for validating openDAQ modules.
+Utility library and prototyping tool for MicroStrain's openDAQ modules.
 
-This tool exposes the programmatic interface for working with openDAQ modules. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
+Currently supports the *Python* bindings, with *C++* and *C#* planned.
 
-## Setup
+## Overview
+These tools are for working with openDAQ programmatically. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
+
+### Utility library
+Import `daq_utils` directly into an existing project:
+
+```python
+import daq_utils
+
+# Example usage
+daq_utils.print_channel_properties(channel)
+```
+
+See [Usage](#usage) for examples of how to use the utility library.
+
+### Interactive Session
+A pre-configured Python session with an openDAQ instance ready to use out of the box.
+Ideal for exploration, prototyping, and testing.
+
+#### Setup
 
 Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies automatically.
 
@@ -18,9 +37,9 @@ scripts\setup.bat
 ./scripts/setup.sh
 ```
 
-## Running a Session
+#### Running a Session
 
-Run the start script. This will open an interactive Python session with the openDAQ instance already initialized and ready to use.
+Run the start script:
 
 **Windows**
 ```
@@ -32,6 +51,9 @@ scripts\start.bat
 ./scripts/start.sh
 ```
 
+This will open an interactive Python session with the openDAQ instance and utility library already initialized and ready for use.
+
+
 ## Usage
 
 See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
@@ -39,6 +61,7 @@ See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/int
 The following variables are available in the session:
 
 - `daq` — the openDAQ python module
+- `daq_utils` — utility functions for working with openDAQ properties
 - `instance` — the openDAQ Instance with the loaded openDAQ module(s)
 
 See the [example code](https://docs.opendaq.com/manual/opendaq/3.30/tutorials/quick_start_setting_up_python.html#_testing_the_installation) for an example of these variables.
@@ -50,10 +73,16 @@ Modules currently have to be copied over manually. Automatic module fetching is 
 For now, copy any new modules into the `modules/` folder and reload the session:
 
 ```python
-reload()
+reload_session()
 ```
 
 This reloads the openDAQ instance and picks up any newly added modules.
+
+To pick up changes from an updated installation without dropping your device connection, run:
+
+```python
+reload_utils()
+```
 
 ### Discovering devices
 
@@ -98,7 +127,7 @@ If that fails, try powering the node off and then back on again. This should fix
 Most properties are organized into `groups`. To get a list of all available property groups for a channel, run:
 
 ```python
-print_property_groups(channel)
+daq_utils.print_property_groups(channel)
 ```
 
 You can then get a reference to the group:
@@ -115,7 +144,7 @@ where:
 To get a list of all available properties within a group, run:
 
 ```python
-print_group_properties(channel, '[GROUP]')
+daq_utils.print_group_properties(channel, '[GROUP]')
 ```
 
 This will print the property name and its type. For example:
@@ -131,7 +160,7 @@ EnableChannel     | ctBool
 To print all properties for a channel across every group at once, run:
 
 ```python
-print_channel_properties(channel)
+daq_utils.print_channel_properties(channel)
 ```
 
 This will print the group, property name, and type for every property. For example:
@@ -149,13 +178,13 @@ Config | EnableChannel     | ctBool
 If you know a property name but not which group it belongs to, use `find_property` to get its full dot-notation path:
 
 ```python
-find_property(channel, '[PROPERTY]')
+daq_utils.find_property(channel, '[PROPERTY]')
 ```
 
 For example:
 
 ```python
-find_property(channel, 'LostBeaconTimeout')
+daq_utils.find_property(channel, 'LostBeaconTimeout')
 # => 'Config.LostBeaconTimeout'
 ```
 
@@ -194,7 +223,7 @@ channel.set_property_value('Config.LostBeaconTimeout', 7)
 The easiest way to call function properties is using the wrapper:
 
 ```python
-result = call_function([ROOT], '[PATH]')
+result = daq_utils.call_function([ROOT], '[PATH]')
 ```
 
 where:
@@ -204,7 +233,7 @@ where:
 For example:
 
 ```python
-result = call_function(channel, "Config.Apply")
+result = daq_utils.call_function(channel, "Config.Apply")
 ```
 
 The result object can then be queried for any returned properties. For example:
