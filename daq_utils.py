@@ -1,7 +1,7 @@
 import opendaq as daq
 
 
-def call_function(root, path):
+def call_function(root, path, *args):
     """Calls an openDAQ function property and return its result.
 
     This function handles casting to a callable automatically.
@@ -9,6 +9,7 @@ def call_function(root, path):
     Args:
         root: The root openDAQ property object to start from.
         path: The name or dot-notation path from the root to the function property.
+        *args: Optional arguments to pass to the function property.
 
     Returns:
         The result returned by the function property, typically a PropertyObject.
@@ -17,16 +18,16 @@ def call_function(root, path):
         RuntimeError: If the property does not exist or cannot be cast properly.
 
     Example:
-        # Recommended: using dot notation from the channel
+        # Function with no arguments
         result = call_function(channel, "Config.Apply")
 
-        # Using a reference to the property group
-        result = call_function(config_group, "Apply")
+        # Function with arguments
+        result = call_function(channel, "Features.ChannelType", 1)
 
         # Query the result
         print(result.get_property_value("Success"))
     """
-    return daq.IFunction.cast_from(root.get_property_value(path))()
+    return daq.IFunction.cast_from(root.get_property_value(path))(*args)
 
 def describe_function(channel, path):
     """Prints the description, return type, and arguments of a function property.

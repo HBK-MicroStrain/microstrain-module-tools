@@ -256,17 +256,22 @@ channelMask  | ctInt
 The easiest way to call function properties is using the wrapper:
 
 ```python
-result = daq_utils.call_function([ROOT], '[PATH]')
+result = daq_utils.call_function([ROOT], '[PATH]', *args)
 ```
 
 where:
 *  `[ROOT]` is a reference to the property object containing the property
 *  `[PATH]` is the name or dot notation path from root to the function property to call.
+*  `*args` are any arguments required by the function property (optional).
 
 For example:
 
 ```python
+# Function with no arguments
 result = daq_utils.call_function(channel, "Config.Apply")
+
+# Function with arguments
+result = daq_utils.call_function(channel, "Features.ChannelType", 1)
 ```
 
 The result object can then be queried for any returned properties. For example:
