@@ -1,5 +1,9 @@
 @echo off
 
+rem Change to the project root so all relative paths work regardless of where this
+rem script was called from.
+cd /d "%~dp0.."
+
 if exist .venv (
     echo Removing existing virtual environment.
     rmdir /s /q .venv

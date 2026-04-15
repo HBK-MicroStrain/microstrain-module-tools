@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Change to the project root so all relative paths work regardless of where this
+# script was called from.
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
     PYTHON="python"
     ACTIVATE=".venv/Scripts/activate"
