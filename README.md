@@ -237,7 +237,7 @@ For example:
 daq_utils.describe_function(channel, 'Features.MaxSweeps')
 ```
 
-This will print the function's description, return type, and an aligned table of its arguments:
+This will output:
 
 ```
 Description: Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration
