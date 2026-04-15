@@ -1,14 +1,17 @@
 # MicroStrain Module Tools
 
-Utility library and prototyping tool for MicroStrain's openDAQ modules.
+A library and interactive prototyping tool that extends openDAQ for MicroStrain modules.
 
 Currently supports the *Python* bindings, with *C++* and *C#* planned.
 
 ## Overview
 These tools are for working with openDAQ programmatically. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
 
-### Utility library
-Import `daq_utils` directly into an existing project:
+### Library
+
+`daq_utils` is a library that simplifies working with openDAQ through extensions tailored for MicroStrain modules.
+
+To use the library, import it into your project:
 
 ```python
 import daq_utils
@@ -17,11 +20,10 @@ import daq_utils
 daq_utils.print_channel_properties(channel)
 ```
 
-See [Usage](#usage) for examples of how to use the utility library.
+See [Usage](#usage) for more examples.
 
-### Interactive Session
-A pre-configured Python session with an openDAQ instance ready to use out of the box.
-Ideal for exploration, prototyping, and testing.
+### Interactive Prototyping Tool
+This tool provides a pre-configured Python session with an openDAQ instance ready to use out of the box — ideal for exploration, prototyping, and testing.
 
 #### Setup
 
@@ -39,7 +41,7 @@ scripts\setup.bat
 
 #### Running a Session
 
-Run the start script:
+Run the startup script:
 
 **Windows**
 ```
@@ -51,14 +53,7 @@ scripts\start.bat
 ./scripts/start.sh
 ```
 
-This will open an interactive Python session with the openDAQ instance and utility library already initialized and ready for use.
-
-
-## Usage
-
-See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
-
-The following variables are available in the session:
+This will open an interactive Python session with the openDAQ instance and library initialized and ready for use. The following variables are available in the session:
 
 - `daq` — the openDAQ python module
 - `daq_utils` — utility functions for working with openDAQ properties
@@ -66,7 +61,7 @@ The following variables are available in the session:
 
 See the [example code](https://docs.opendaq.com/manual/opendaq/3.30/tutorials/quick_start_setting_up_python.html#_testing_the_installation) for an example of these variables.
 
-### Adding modules
+#### Adding modules
 
 Modules currently have to be copied over manually. Automatic module fetching is planned for a future update.
 
@@ -78,11 +73,19 @@ reload_session()
 
 This reloads the openDAQ instance and picks up any newly added modules.
 
-To pick up changes from an updated installation without dropping your device connection, run:
+#### Updating the library
+
+If you update the library while a session is running, make the new features available immediately:
 
 ```python
 reload_utils()
 ```
+
+This will preserve the existing openDAQ instance and any connected devices, so you can continue working without interruption.
+
+## Usage
+
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
 
 ### Discovering devices
 
