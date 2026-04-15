@@ -85,7 +85,7 @@ This will preserve the existing openDAQ instance and any connected devices, so y
 
 ## Usage
 
-See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for more info.
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for a full reference on the openDAQ API.
 
 ### Discovering devices
 
