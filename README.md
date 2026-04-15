@@ -95,7 +95,7 @@ If that fails, try powering the node off and then back on again. This should fix
 
 ### Querying available property groups
 
-Properties are organized into `groups`. To get a list of all available property groups for a channel, run:
+Most properties are organized into `groups`. To get a list of all available property groups for a channel, run:
 
 ```python
 for group in channel.visible_properties:
@@ -137,11 +137,11 @@ print_channel_properties(channel)
 This will print the group, property name, and type for every property. For example:
 
 ```
-Group  | Property          | Type   
+Group  | Property          | Type
 -------+-------------------+--------
-Config | LostBeaconTimeout | ctInt  
-Config | Apply             | ctFunc 
-Config | EnableChannel     | ctBool 
+Config | LostBeaconTimeout | ctInt
+Config | Apply             | ctFunc
+Config | EnableChannel     | ctBool
 ```
 
 ### Accessing individual properties

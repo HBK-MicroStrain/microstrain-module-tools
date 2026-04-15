@@ -56,11 +56,15 @@ def print_channel_properties(channel):
         channel: The openDAQ channel to query properties from.
     """
     # Builds a list of tuples in the format: (group name, property name, property type)
-    rows = [
-        (group.name, prop.name, str(prop.value_type).split('CoreType.')[-1])
-        for group in channel.visible_properties
-        for prop in channel.get_property_value(group.name).visible_properties
-    ]
+    rows = []
+    for prop in channel.visible_properties:
+        # Properties within a group
+        if prop.value_type == daq.CoreType.ctObject:
+            for child in channel.get_property_value(prop.name).visible_properties:
+                rows.append((prop.name, child.name, str(child.value_type).split('CoreType.')[-1]))
+        # Top-level properties that are not in a group, which we want to include as well
+        else:
+            rows.append(('No group', prop.name, str(prop.value_type).split('CoreType.')[-1]))
 
     # Computes the width of the widest entry in each of the columns, at least as wide as the header
     headers = ('Group', 'Property', 'Type')
