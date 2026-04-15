@@ -137,11 +137,11 @@ print_channel_properties(channel)
 This will print the group, property name, and type for every property. For example:
 
 ```
-Group  | Property          | Type           
--------+-------------------+----------------
-Config | LostBeaconTimeout | CoreType.ctInt 
-Config | Apply             | CoreType.ctFunc
-Config | EnableChannel     | CoreType.ctBool
+Group  | Property          | Type   
+-------+-------------------+--------
+Config | LostBeaconTimeout | ctInt  
+Config | Apply             | ctFunc 
+Config | EnableChannel     | ctBool 
 ```
 
 ### Accessing individual properties

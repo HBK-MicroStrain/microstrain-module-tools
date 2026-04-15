@@ -57,7 +57,7 @@ def print_channel_properties(channel):
     """
     # Builds a list of tuples in the format: (group name, property name, property type)
     rows = [
-        (group.name, prop.name, str(prop.value_type))
+        (group.name, prop.name, str(prop.value_type).split('CoreType.')[-1])
         for group in channel.visible_properties
         for prop in channel.get_property_value(group.name).visible_properties
     ]
