@@ -178,34 +178,6 @@ Config | Apply             | ctFunc
 Config | EnableChannel     | ctBool
 ```
 
-### Querying function properties
-
-To inspect a function property's description, return type, and arguments:
-
-```python
-daq_utils.describe_function(channel, '[PATH]')
-```
-
-For example:
-
-```python
-daq_utils.describe_function(channel, 'Features.MaxSweeps')
-```
-
-This will print the function's description, return type, and an aligned table of its arguments:
-
-```
-Description: Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration
-Returns:     ctObject
-
-Argument     | Type
--------------+--------------
-samplingMode | ctEnumeration
-dataMode     | ctEnumeration
-dataFormat   | ctEnumeration
-channelMask  | ctInt
-```
-
 ### Finding a property path
 
 If you know a property name but not which group it belongs to, use `find_property` to get its full dot-notation path:
@@ -249,6 +221,34 @@ print(f'Lost beacon timeout value: {timeout}')
 
 # Set a new timeout
 channel.set_property_value('Config.LostBeaconTimeout', 7)
+```
+
+### Querying function properties
+
+To inspect a function property's description, return type, and arguments:
+
+```python
+daq_utils.describe_function(channel, '[PATH]')
+```
+
+For example:
+
+```python
+daq_utils.describe_function(channel, 'Features.MaxSweeps')
+```
+
+This will print the function's description, return type, and an aligned table of its arguments:
+
+```
+Description: Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration
+Returns:     ctObject
+
+Argument     | Type
+-------------+--------------
+samplingMode | ctEnumeration
+dataMode     | ctEnumeration
+dataFormat   | ctEnumeration
+channelMask  | ctInt
 ```
 
 ### Calling function properties
