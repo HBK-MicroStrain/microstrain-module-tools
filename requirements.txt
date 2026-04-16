@@ -1,1 +1,1 @@
-opendaq==3.20.4
+opendaq==3.30.3

@@ -129,6 +129,39 @@ def print_group_properties(channel, group):
     for row in rows:
         print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
 
+def list_nodes(device):
+    """Prints a table of all wireless nodes discovered by the device.
+
+    Displays each node's index, ID, and model name.
+
+    Args:
+        device: The openDAQ device (wireless base station).
+    """
+    channels = device.get_channels()
+
+    if not channels:
+        print('No nodes found.')
+        return
+
+    # Builds a list of tuples in the format: (index, model name (node ID))
+    rows = [(str(i), channel.name) for i, channel in enumerate(channels)]
+
+    # Computes the width of the widest entry in each of the columns, at least as wide as the header
+    headers = ('#', 'Model (Node ID)')
+    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
+
+    print()
+
+    # Display header row
+    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
+    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
+
+    # Display rows
+    for row in rows:
+        print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
+
+    print()
+
 def print_channel_properties(channel):
     """Prints all properties available on a channel, regardless of group.
 

@@ -6,7 +6,9 @@ import opendaq as daq
 import daq_utils
 
 
-MODULE_PATH = str(pathlib.Path(__file__).parent / "modules")
+if '_SETUP_FILE' not in globals():
+    _SETUP_FILE = pathlib.Path(__file__).resolve()
+MODULE_PATH = str(_SETUP_FILE.parent / "modules")
 
 def _create_instance():
     builder = daq.InstanceBuilder()
@@ -20,7 +22,7 @@ def reload_session():
 
     Note: this will drop any existing device connections.
     """
-    exec(open(__file__).read(), globals())
+    exec(open(_SETUP_FILE).read(), globals())
     print("Session reloaded.")
 
 def reload_utils():

@@ -117,13 +117,34 @@ instance.remove_device(device)
 
 This will disconnect the device so you can use it in other applications, such as `SensorConnect`.
 
-### Getting channels
+### Listing nodes
 
-Wireless nodes are represented as channels. Channels can be retrieved once there is a reference to a device. For example, to get the first channel for a device:
+To see all wireless nodes currently discovered by the device:
 
 ```python
-channel = device.get_channels()[0]
+daq_utils.list_nodes(device)
 ```
+
+This will print a table of each node's index and info, for example:
+
+```
+# | Model (Node ID)
+--+------------------------
+0 | G-Link-200-8g (33682)
+1 | G-Link-200-8g (33683)
+```
+
+### Getting channels
+
+Wireless nodes are represented as channels. See [Listing nodes](#listing-nodes) to find the index of the node you want, then retrieve its channel:
+
+```python
+channel = device.get_channels()[INDEX]
+```
+
+where:
+
+* `INDEX` is the index of the node channel.
 
 If that fails, try powering the node off and then back on again. This should fix the issue. If commands can no longer be entered in the interactive terminal, press `Enter` one or two times.
 
