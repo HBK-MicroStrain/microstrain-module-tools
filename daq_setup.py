@@ -16,12 +16,14 @@ def _create_instance():
     return builder.build()
 
 def reload_session():
-    """Reloads the openDAQ instance, picking up any new modules.
+    """Reloads the openDAQ instance and utility library.
 
-    Call this after copying a new .dll into `modules/`
+    Call this after copying a new .dll into `modules/` or after updating
+    daq_utils.py.
 
     Note: this will drop any existing device connections.
     """
+    importlib.reload(daq_utils)
     exec(open(_SETUP_FILE).read(), globals())
     print("Session reloaded.")
 
