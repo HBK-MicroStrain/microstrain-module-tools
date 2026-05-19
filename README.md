@@ -1,6 +1,6 @@
 # MicroStrain Module Tools
 
-A library and interactive prototyping tool that extends openDAQ for MicroStrain modules.
+A companion library and prototyping tool that enhances working with the MicroStrain Wireless OpenDAQ module.
 
 Currently supports the *Python* bindings, with *C++* and *C#* planned.
 
