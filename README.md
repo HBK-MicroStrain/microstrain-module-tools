@@ -299,7 +299,9 @@ The result object can then be queried for any returned properties. For example:
 
 ```python
 # Did the function execute properly?
-result.get_property_value('Success')
+success = result.get_property_value('Success')
+print(success)
+# => 'True'
 ```
 
 ### Creating typed values
