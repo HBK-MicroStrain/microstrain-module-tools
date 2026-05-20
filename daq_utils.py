@@ -1,3 +1,7 @@
+import importlib
+import inspect
+import sys
+
 import opendaq as daq
 
 
@@ -13,6 +17,7 @@ class DaqTypeFactory:
     """
 
     def __init__(self, instance):
+        self._instance = instance
         self._type_manager = instance.context.type_manager
 
     def enumeration(self, type_name, value_name):
