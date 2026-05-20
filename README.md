@@ -301,3 +301,49 @@ The result object can then be queried for any returned properties. For example:
 # Did the function execute properly?
 result.get_property_value('Success')
 ```
+
+### Creating typed values
+
+To create openDAQ typed values such as enumerations and structs, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
+
+```python
+types = daq_utils.DaqTypeFactory(instance)
+```
+
+#### Creating an enum value
+
+```python
+enum_val = types.enumeration("[TYPE]", "[VALUE]")
+```
+
+where:
+*  `[TYPE]` is the openDAQ enum type to use.
+*  `[VALUE]` is the actual enum value to assign for that type.
+
+For example:
+```python
+voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+```
+
+#### Creating a Struct value
+
+First build a `daq.Dict()` with the struct's fields, then pass it to `types.struct()`:
+
+```python
+fields = daq.Dict()
+fields["[FIELD]"] = [VALUE]
+struct_val = types.struct("[TYPE]", fields)
+```
+
+where:
+*  `[TYPE]` is the openDAQ struct type to use.
+*  `[FIELD]` is the name for a field in the struct.
+*  `[VALUE]` is the value for a field in the struct.
+
+For example:
+```python
+fields = daq.Dict()
+fields["Slope"] = daq.Float(1.0)
+fields["Offset"] = daq.Float(0.0)
+linear_eq = types.struct("MSCL_Wireless_LinearEquation", fields)
+```

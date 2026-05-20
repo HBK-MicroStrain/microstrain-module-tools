@@ -1,6 +1,48 @@
 import opendaq as daq
 
 
+class DaqTypeFactory:
+    """Creates openDAQ typed values (enumerations, structs) without requiring explicit type manager or string wrapping.
+
+    Args:
+        instance: The openDAQ Instance to retrieve the type manager from.
+
+    Example:
+        types = daq_utils.DaqTypeFactory(instance)
+        voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+    """
+
+    def __init__(self, instance):
+        self._type_manager = instance.context.type_manager
+
+    def enumeration(self, type_name, value_name):
+        """Creates an openDAQ Enumeration value.
+
+        Args:
+            type_name: The openDAQ enum type name.
+            value_name: The enum value name.
+
+        Example:
+            voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+        """
+        return daq.Enumeration(daq.String(type_name), daq.String(value_name), self._type_manager)
+
+    def struct(self, type_name, fields):
+        """Creates an openDAQ Struct value.
+
+        Args:
+            type_name: The openDAQ struct type name.
+            fields: A daq.Dict containing the struct's field names and values.
+
+        Example:
+            fields = daq.Dict()
+            fields["Slope"] = daq.Float(1.0)
+            fields["Offset"] = daq.Float(0.0)
+            linear_eq = types.struct("MSCL_Wireless_LinearEquation", fields)
+        """
+        return daq.Struct(daq.String(type_name), fields, self._type_manager)
+
+
 def call_function(root, path, *args):
     """Calls an openDAQ function property and return its result.
 
@@ -28,6 +70,7 @@ def call_function(root, path, *args):
         print(result.get_property_value("Success"))
     """
     return daq.IFunction.cast_from(root.get_property_value(path))(*args)
+
 
 def describe_function(channel, path):
     """Prints the description and arguments of a function property.
@@ -69,6 +112,7 @@ def describe_function(channel, path):
         for row in rows:
             print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
 
+
 def find_property(channel, name):
     """Returns the full dot-notation path of a property given its name.
 
@@ -92,6 +136,7 @@ def find_property(channel, name):
             return name
     return 'Property not found'
 
+
 def print_property_groups(channel):
     """Prints all property groups available on a channel.
 
@@ -102,6 +147,7 @@ def print_property_groups(channel):
         # Some top-level properties are not groups. We only want to print the groups.
         if prop.value_type == daq.CoreType.ctObject:
             print(prop.name)
+
 
 def print_group_properties(channel, group):
     """Prints all properties within a group for a channel as an aligned table.
@@ -130,6 +176,7 @@ def print_group_properties(channel, group):
     # Display rows
     for row in rows:
         print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
+
 
 def list_nodes(device):
     """Prints a table of all wireless nodes discovered by the device.
@@ -163,6 +210,7 @@ def list_nodes(device):
         print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
 
     print()
+
 
 def print_channel_properties(channel):
     """Prints all properties available on a channel, regardless of group.
