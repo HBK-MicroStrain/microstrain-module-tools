@@ -32,15 +32,26 @@ class DaqTypeFactory:
 
         Args:
             type_name: The openDAQ struct type name.
-            fields: A daq.Dict containing the struct's field names and values.
+            fields: A dict containing the struct's field names and values. Python primitives
+                (bool, int, float) are converted to their openDAQ equivalents automatically.
+                openDAQ types (e.g. Enumeration) are passed through as-is.
 
         Example:
-            fields = daq.Dict()
-            fields["Slope"] = daq.Float(1.0)
-            fields["Offset"] = daq.Float(0.0)
-            linear_eq = types.struct("MSCL_Wireless_LinearEquation", fields)
+            linear_eq = types.struct("MSCL_Wireless_LinearEquation", {"Slope": 1.0, "Offset": 0.0})
         """
-        return daq.Struct(daq.String(type_name), fields, self._type_manager)
+        daq_fields = daq.Dict()
+
+        for key, value in fields.items():
+            if isinstance(value, bool):
+                daq_fields[key] = daq.Boolean(value)
+            elif isinstance(value, int):
+                daq_fields[key] = daq.Integer(value)
+            elif isinstance(value, float):
+                daq_fields[key] = daq.Float(value)
+            else:
+                daq_fields[key] = value
+
+        return daq.Struct(daq.String(type_name), daq_fields, self._type_manager)
 
 
 def call_function(root, path, *args):

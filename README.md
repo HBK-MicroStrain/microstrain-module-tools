@@ -312,6 +312,8 @@ types = daq_utils.DaqTypeFactory(instance)
 
 #### Creating an enum value
 
+Use `enumeration()`:
+
 ```python
 enum_val = types.enumeration("[TYPE]", "[VALUE]")
 ```
@@ -327,12 +329,10 @@ voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
 
 #### Creating a Struct value
 
-First build a `daq.Dict()` with the struct's fields, then pass it to `types.struct()`:
+Pass a Python dict with the struct's fields to `struct()`. Python primitives are converted automatically, and openDAQ types such as enumerations are passed through as-is:
 
 ```python
-fields = daq.Dict()
-fields["[FIELD]"] = [VALUE]
-struct_val = types.struct("[TYPE]", fields)
+struct_val = types.struct("[TYPE]", {"[FIELD]": [VALUE], ...})
 ```
 
 where:
@@ -342,8 +342,5 @@ where:
 
 For example:
 ```python
-fields = daq.Dict()
-fields["Slope"] = daq.Float(1.0)
-fields["Offset"] = daq.Float(0.0)
-linear_eq = types.struct("MSCL_Wireless_LinearEquation", fields)
+linear_eq = types.struct("MSCL_Wireless_LinearEquation", {"Slope": 1.0, "Offset": 0.0})
 ```
