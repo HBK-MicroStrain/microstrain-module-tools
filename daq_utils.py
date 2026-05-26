@@ -87,48 +87,6 @@ def call_function(root, path, *args):
     """
     return daq.IFunction.cast_from(root.get_property_value(path))(*args)
 
-
-def describe_function(channel, path):
-    """Prints the description and arguments of a function property.
-
-    Args:
-        channel: The openDAQ channel the function property belongs to.
-        path: The dot-notation path to the function property.
-
-    Example:
-        describe_function(channel, 'Features.MaxSweeps')
-    """
-    prop = channel.get_property(path)
-    ci = prop.callable_info
-
-    print()
-
-    if '\nReturns:' in prop.description:
-        desc, returns = prop.description.split('\nReturns:', 1)
-        print(f'Description: {desc}')
-        print(f'Returns:     {returns.strip()}')
-    else:
-        print(f'Description: {prop.description}')
-
-    if ci.arguments:
-        # Builds a list of tuples in the format: (argument name, argument type)
-        rows = [(arg.Name, str(daq.CoreType(arg.Type)).split('CoreType.')[-1]) for arg in ci.arguments]
-
-        # Computes the width of the widest entry in each of the columns, at least as wide as the header
-        headers = ('Argument', 'Type')
-        col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
-
-        print()
-
-        # Display arguments table header row
-        print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
-        print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
-
-        # Display arguments table rows
-        for row in rows:
-            print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
-
-
 def find_property(channel, name):
     """Returns the full dot-notation path of a property given its name.
 

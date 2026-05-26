@@ -246,30 +246,32 @@ channel.set_property_value('Config.LostBeaconTimeout', 7)
 
 ### Querying function properties
 
-To inspect a function property's description, return type, and arguments:
+To inspect a function property's description, arguments, and return type, read the `description` field directly from the property:
 
 ```python
-daq_utils.describe_function(channel, '[PATH]')
+print(channel.get_property('[PATH]').description)
 ```
 
 For example:
 
 ```python
-daq_utils.describe_function(channel, 'Features.MaxSweeps')
+print(channel.get_property('Features.MaxSweeps').description)
 ```
 
 This will output:
 
 ```
-Description: Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration.
-Returns:     {Success: Bool, Result: Int}
+Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration.
 
-Argument     | Type
--------------+--------------
-samplingMode | ctEnumeration
-dataMode     | ctEnumeration
-dataFormat   | ctEnumeration
-channelMask  | ctInt
+Arguments:
+    samplingMode: Enumeration<SamplingMode>
+    dataMode: Enumeration<DataMode>
+    dataFormat: Enumeration<DataFormat>
+    channelMask: Int
+
+Returns:
+    Success: Bool,
+    Result: Int
 ```
 
 ### Calling function properties
