@@ -278,14 +278,18 @@ This will output:
 ```
 
 ### Inspecting types
-To view what fields/values are available for openDAQ types such as enumerations and structs, use their corresponding `describe` function.
+To view what fields/values are available for openDAQ types such as enumerations and structs, create a `DaqTypeInspector`:
+
+```python
+inspector = daq_utils.DaqTypeInspector(instance)
+```
 
 #### Enums
 
 To see all valid values for an enum:
 
 ```python
-daq_utils.describe_enum(instance, 'MSCL_Wireless_AutoCalCompletionFlag')
+inspector.describe_enum('MSCL_Wireless_AutoCalCompletionFlag')
 ```
 
 This will output:
@@ -303,7 +307,7 @@ autocal_notComplete
 
 To see the fields and their types for a struct:
 ```python
-daq_utils.describe_struct(instance, 'MSCL_Wireless_LinearEquation')
+inspector.describe_struct('MSCL_Wireless_LinearEquation')
 ```
 
 This will output:
