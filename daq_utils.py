@@ -71,7 +71,7 @@ def _field_type_label(value):
     if isinstance(value, str):
         return 'String'
     if daq.IEnumeration.can_cast_from(value):
-        return f'Enum<{daq.IEnumeration.cast_from(value).enumeration_type}>'
+        return f'Enum<{daq.IEnumeration.cast_from(value).enumeration_type.name}>'
     return type(value).__name__
 
 
