@@ -159,21 +159,18 @@ daq_utils.print_property_groups(channel)
 You can then get a reference to the group:
 
 ```python
-prop_group = channel.get_property_value('[GROUP]')
+prop_group = channel.get_property_value('Config')
 ```
-
-where:
- * `[GROUP]` is a property group name from the query above.
 
 ### Querying available properties
 
 To get a list of all available properties within a group:
 
 ```python
-daq_utils.print_group_properties(channel, '[GROUP]')
+daq_utils.print_group_properties(channel, 'Config')
 ```
 
-This will print the property name and its type. For example:
+This will print the property name and its type:
 
 ```
 Property          | Type
@@ -204,34 +201,21 @@ Config | EnableChannel     | ctBool
 If you know a property name but not which group it belongs to, use `find_property` to get its full dot-notation path:
 
 ```python
-daq_utils.find_property(channel, '[PROPERTY]')
+daq_utils.find_property(channel, 'LostBeaconTimeout')
 ```
 
-For example:
-
-```python
-daq_utils.find_property(channel, 'LostBeaconTimeout')
-# => 'Config.LostBeaconTimeout'
+This will output:
+```
+'Config.LostBeaconTimeout'
 ```
 
 ### Accessing individual properties
 
-Individual properties can be accessed from their group. This can be done in two ways:
+Individual properties can be accessed in one of the following ways:
+* using dot notation on the channel (*recommended*)
+* via a group reference.
 
-```python
-# Recommended: using the dot notation on the channel
-channel.get_property_value('[GROUP].[PROPERTY]')
-
-# Using a reference to the property group
-prop_group.get_property_value('[PROPERTY]')
-```
-
-where:
- * `[PROPERTY]` is the name of the individual property to be accessed.
-
-**NOTE:** Dot notation is the recommended approach, and will be used for the rest of this document.
-
-For example, to get and set the lost beacon timeout property:
+For example, to get and set the lost beacon timeout property using dot notation:
 
 ```python
 # Get the current timeout
@@ -247,12 +231,6 @@ channel.set_property_value('Config.LostBeaconTimeout', 7)
 ### Querying function properties
 
 To inspect a function property's description, arguments, and return type, read the `description` field directly from the property:
-
-```python
-print(channel.get_property('[PATH]').description)
-```
-
-For example:
 
 ```python
 print(channel.get_property('Features.MaxSweeps').description)
@@ -279,17 +257,6 @@ Returns:
 The easiest way to call function properties is using the wrapper:
 
 ```python
-result = daq_utils.call_function([ROOT], '[PATH]', *args)
-```
-
-where:
-*  `[ROOT]` is a reference to the property object containing the property
-*  `[PATH]` is the name or dot notation path from root to the function property to call.
-*  `*args` are any arguments required by the function property (optional).
-
-For example:
-
-```python
 # Function with no arguments
 result = daq_utils.call_function(channel, "Config.Apply")
 
@@ -303,47 +270,19 @@ The result object can then be queried for any returned properties. For example:
 # Did the function execute properly?
 success = result.get_property_value('Success')
 print(success)
-# => 'True'
-```
-
-### Inspecting types
-
-When a function property takes a struct or enum argument, use `describe_struct` and `describe_enum` to inspect what fields or values are available.
-
-#### Structs
-
-To see the fields and their types for a struct:
-
-```python
-daq_utils.describe_struct(instance, '[TYPE]')
-```
-
-For example:
-
-```python
-daq_utils.describe_struct(instance, 'MSCL_Wireless_LinearEquation')
 ```
 
 This will output:
-
 ```
-Field  | Type
--------+------
-Slope  | Float
-Offset | Float
+'True'
 ```
 
-**NOTE:** Field types are inferred from default values. Fields without defaults show `?`.
+### Inspecting types
+To view what fields/values are available for openDAQ types such as enumerations and structs, use their corresponding `describe` function.
 
 #### Enums
 
 To see all valid values for an enum:
-
-```python
-daq_utils.describe_enum(instance, '[TYPE]')
-```
-
-For example:
 
 ```python
 daq_utils.describe_enum(instance, 'MSCL_Wireless_AutoCalCompletionFlag')
@@ -360,6 +299,22 @@ autocal_maybeInvalid_notApplied
 autocal_notComplete
 ```
 
+#### Structs
+
+To see the fields and their types for a struct:
+```python
+daq_utils.describe_struct(instance, 'MSCL_Wireless_LinearEquation')
+```
+
+This will output:
+
+```
+Field  | Type
+-------+------
+Slope  | Float
+Offset | Float
+```
+
 ### Creating typed values
 
 To create openDAQ typed values such as enumerations and structs, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
@@ -373,15 +328,6 @@ types = daq_utils.DaqTypeFactory(instance)
 Use `enumeration()`:
 
 ```python
-enum_val = types.enumeration("[TYPE]", "[VALUE]")
-```
-
-where:
-*  `[TYPE]` is the openDAQ enum type to use.
-*  `[VALUE]` is the actual enum value to assign for that type.
-
-For example:
-```python
 voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
 ```
 
@@ -390,15 +336,11 @@ voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
 Pass a Python dict with the struct's fields to `struct()`. Python primitives are converted automatically, and openDAQ types such as enumerations are passed through as-is:
 
 ```python
-struct_val = types.struct("[TYPE]", {"[FIELD]": [VALUE], ...})
-```
-
-where:
-*  `[TYPE]` is the openDAQ struct type to use.
-*  `[FIELD]` is the name for a field in the struct.
-*  `[VALUE]` is the value for a field in the struct.
-
-For example:
-```python
-linear_eq = types.struct("MSCL_Wireless_LinearEquation", {"Slope": 1.0, "Offset": 0.0})
+linear_eq = types.struct(
+    "MSCL_Wireless_LinearEquation",
+    {
+        "Slope": 1.0,
+        "Offset": 0.0
+    }
+)
 ```
