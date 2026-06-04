@@ -306,6 +306,60 @@ print(success)
 # => 'True'
 ```
 
+### Inspecting types
+
+When a function property takes a struct or enum argument, use `describe_struct` and `describe_enum` to inspect what fields or values are available.
+
+#### Structs
+
+To see the fields and their types for a struct:
+
+```python
+daq_utils.describe_struct(instance, '[TYPE]')
+```
+
+For example:
+
+```python
+daq_utils.describe_struct(instance, 'MSCL_Wireless_LinearEquation')
+```
+
+This will output:
+
+```
+Field  | Type
+-------+------
+Slope  | Float
+Offset | Float
+```
+
+**NOTE:** Field types are inferred from default values. Fields without defaults show `?`.
+
+#### Enums
+
+To see all valid values for an enum:
+
+```python
+daq_utils.describe_enum(instance, '[TYPE]')
+```
+
+For example:
+
+```python
+daq_utils.describe_enum(instance, 'MSCL_Wireless_AutoCalCompletionFlag')
+```
+
+This will output:
+
+```
+Enumerator
+----------
+autocal_success
+autocal_maybeInvalid_applied
+autocal_maybeInvalid_notApplied
+autocal_notComplete
+```
+
 ### Creating typed values
 
 To create openDAQ typed values such as enumerations and structs, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
