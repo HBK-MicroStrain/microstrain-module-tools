@@ -59,6 +59,84 @@ class DaqTypeFactory:
         return daq.Struct(daq.String(type_name), daq_fields, self._type_manager)
 
 
+class DaqTypeInspector:
+    """Inspects openDAQ registered types without requiring an explicit instance argument on each call.
+
+    Args:
+        instance: The openDAQ Instance to retrieve the type manager from.
+
+    Example:
+        inspector = daq_utils.DaqTypeInspector(instance)
+        inspector.describe_struct("MSCL_Wireless_ShuntCalCmdInfo")
+        inspector.describe_enum("MSCL_Wireless_Voltage")
+    """
+
+    def __init__(self, instance):
+        self._instance = instance
+        # Releasing an IEnumerationType Python wrapper corrupts the underlying C++ object in the
+        # openDAQ Python binding, causing a segfault on any subsequent call for the same type. Caching
+        # the names as plain Python strings after the first call avoids touching the C++ object again.
+        #
+        # NOTE: Temporary workaround — remove once the openDAQ version is updated with a fix.
+        self._enum_name_cache: dict[str, list[str]] = {}
+
+    def describe_enum(self, type_name):
+        """Prints the enumerator names for a registered enum type.
+
+        Args:
+            type_name: The full registered enum type name.
+
+        Example:
+            inspector.describe_enum("MSCL_Wireless_AutoCalCompletionFlag")
+        """
+        if type_name not in self._enum_name_cache:
+            type_obj = self._instance.context.type_manager.get_type(type_name)
+            enum_type = daq.IEnumerationType.cast_from(type_obj)
+            self._enum_name_cache[type_name] = [str(k) for k in enum_type.as_dictionary]
+
+        names = self._enum_name_cache[type_name]
+        header = 'Enumerator'
+        width = max(len(header), max(len(str(n)) for n in names))
+
+        print()
+        print(f'{header:<{width}}')
+        print('-' * width)
+
+        for name in names:
+            print(str(name))
+
+        print()
+
+    def describe_struct(self, type_name):
+        """Prints the fields and their types for a registered struct type.
+
+        Args:
+            type_name: The full registered struct type name.
+
+        Example:
+            inspector.describe_struct("MSCL_Wireless_LinearEquation")
+        """
+        type_obj = self._instance.context.type_manager.get_type(type_name)
+        struct_type = daq.IStructType.cast_from(type_obj)
+        builder = daq.StructBuilder(daq.String(type_name), self._instance.context.type_manager)
+
+        rows = [
+            (str(name), _field_type_label(value))
+            for name, value in zip(struct_type.field_names, builder.field_values)
+        ]
+        headers = ('Field', 'Type')
+        col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
+
+        print()
+        print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
+        print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
+
+        for name, type_str in rows:
+            print(f'{name:<{col_widths[0]}} | {type_str:<{col_widths[1]}}')
+
+        print()
+
+
 def _field_type_label(value):
     if value is None:
         return '?'
@@ -73,78 +151,6 @@ def _field_type_label(value):
     if daq.IEnumeration.can_cast_from(value):
         return f'Enum<{daq.IEnumeration.cast_from(value).enumeration_type.name}>'
     return type(value).__name__
-
-
-def describe_struct(instance, type_name):
-    """Prints the fields and their types for a registered struct type.
-
-    Field types are inferred from default values. Fields without defaults show '?'.
-
-    Args:
-        instance: The openDAQ Instance to retrieve the type manager from.
-        type_name: The full registered struct type name.
-
-    Example:
-        describe_struct(instance, "MSCL_Wireless_LinearEquation")
-    """
-    type_obj = instance.context.type_manager.get_type(type_name)
-    struct_type = daq.IStructType.cast_from(type_obj)
-    builder = daq.StructBuilder(daq.String(type_name), instance.context.type_manager)
-
-    rows = [
-        (str(name), _field_type_label(value))
-        for name, value in zip(struct_type.field_names, builder.field_values)
-    ]
-    headers = ('Field', 'Type')
-    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
-
-    print()
-    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
-    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
-
-    for name, type_str in rows:
-        print(f'{name:<{col_widths[0]}} | {type_str:<{col_widths[1]}}')
-
-    print()
-
-
-# Releasing an IEnumerationType Python wrapper corrupts the underlying C++ object in the
-# openDAQ Python binding, causing a segfault on any subsequent call for the same type. Caching
-# the names as plain Python strings after the first call avoids touching the C++ object again.
-#
-# NOTE: This is a temporary workaround until the underlying bug is fixed in openDAQ. Remove
-#       this once the openDAQ version is updated with a fix.
-_enum_name_cache: dict[tuple, list[str]] = {}
-
-
-def describe_enum(instance, type_name):
-    """Prints the enumerator names for a registered enum type.
-
-    Args:
-        instance: The openDAQ Instance to retrieve the type manager from.
-        type_name: The full registered enum type name.
-
-    Example:
-        describe_enum(instance, "MSCL_Wireless_AutoCalCompletionFlag")
-    """
-    cache_key = (id(instance), type_name)
-    if cache_key not in _enum_name_cache:
-        type_obj = instance.context.type_manager.get_type(type_name)
-        enum_type = daq.IEnumerationType.cast_from(type_obj)
-        _enum_name_cache[cache_key] = [str(k) for k in enum_type.as_dictionary]
-
-    names = _enum_name_cache[cache_key]
-    header = 'Enumerator'
-    width = max(len(header), max(len(str(n)) for n in names))
-
-    print()
-    print(f'{header:<{width}}')
-    print('-' * width)
-
-    for name in names:
-        print(str(name))
-
-    print()
 
 
 def call_function(root, path, *args):
@@ -174,6 +180,7 @@ def call_function(root, path, *args):
         print(result.get_property_value("Success"))
     """
     return daq.IFunction.cast_from(root.get_property_value(path))(*args)
+
 
 def find_property(channel, name):
     """Returns the full dot-notation path of a property given its name.
