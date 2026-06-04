@@ -59,6 +59,94 @@ class DaqTypeFactory:
         return daq.Struct(daq.String(type_name), daq_fields, self._type_manager)
 
 
+def _field_type_label(value):
+    if value is None:
+        return '?'
+    if isinstance(value, bool):
+        return 'Bool'
+    if isinstance(value, int):
+        return 'Int'
+    if isinstance(value, float):
+        return 'Float'
+    if isinstance(value, str):
+        return 'String'
+    if daq.IEnumeration.can_cast_from(value):
+        return f'Enum<{daq.IEnumeration.cast_from(value).enumeration_type}>'
+    return type(value).__name__
+
+
+def describe_struct(instance, type_name):
+    """Prints the fields and their types for a registered struct type.
+
+    Field types are inferred from default values. Fields without defaults show '?'.
+
+    Args:
+        instance: The openDAQ Instance to retrieve the type manager from.
+        type_name: The full registered struct type name.
+
+    Example:
+        describe_struct(instance, "MSCL_Wireless_LinearEquation")
+    """
+    type_obj = instance.context.type_manager.get_type(type_name)
+    struct_type = daq.IStructType.cast_from(type_obj)
+    builder = daq.StructBuilder(daq.String(type_name), instance.context.type_manager)
+
+    rows = [
+        (str(name), _field_type_label(value))
+        for name, value in zip(struct_type.field_names, builder.field_values)
+    ]
+    headers = ('Field', 'Type')
+    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
+
+    print()
+    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
+    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
+
+    for name, type_str in rows:
+        print(f'{name:<{col_widths[0]}} | {type_str:<{col_widths[1]}}')
+
+    print()
+
+
+# Releasing an IEnumerationType Python wrapper corrupts the underlying C++ object in the
+# openDAQ Python binding, causing a segfault on any subsequent call for the same type. Caching
+# the names as plain Python strings after the first call avoids touching the C++ object again.
+#
+# NOTE: This is a temporary workaround until the underlying bug is fixed in openDAQ. Remove
+#       this once the openDAQ version is updated with a fix.
+_enum_name_cache: dict[tuple, list[str]] = {}
+
+
+def describe_enum(instance, type_name):
+    """Prints the enumerator names for a registered enum type.
+
+    Args:
+        instance: The openDAQ Instance to retrieve the type manager from.
+        type_name: The full registered enum type name.
+
+    Example:
+        describe_enum(instance, "MSCL_Wireless_AutoCalCompletionFlag")
+    """
+    cache_key = (id(instance), type_name)
+    if cache_key not in _enum_name_cache:
+        type_obj = instance.context.type_manager.get_type(type_name)
+        enum_type = daq.IEnumerationType.cast_from(type_obj)
+        _enum_name_cache[cache_key] = [str(k) for k in enum_type.as_dictionary]
+
+    names = _enum_name_cache[cache_key]
+    header = 'Enumerator'
+    width = max(len(header), max(len(str(n)) for n in names))
+
+    print()
+    print(f'{header:<{width}}')
+    print('-' * width)
+
+    for name in names:
+        print(str(name))
+
+    print()
+
+
 def call_function(root, path, *args):
     """Calls an openDAQ function property and return its result.
 
