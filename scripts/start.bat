@@ -8,4 +8,4 @@ echo Activating virtual environment.
 call .venv\Scripts\activate
 
 echo Starting JupyterLab.
-jupyter lab
+jupyter lab python.ipynb csharp.ipynb

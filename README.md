@@ -2,7 +2,7 @@
 
 A companion library and prototyping tool that enhances working with the MicroStrain Wireless OpenDAQ module.
 
-Currently supports the *Python* bindings, with *C++* and *C#* planned.
+Currently supports *Python* and *C#* bindings.
 
 ## Overview
 These tools are for working with openDAQ programmatically. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
@@ -29,7 +29,7 @@ This tool provides a pre-configured Python session with an openDAQ instance read
 
 #### Setup
 
-Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies automatically.
+Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies for the Python notebook. Add `--csharp` to also set up the C# notebook.
 
 **Windows**
 ```
@@ -55,13 +55,7 @@ scripts\start.bat
 ./scripts/start.sh
 ```
 
-This will open an interactive Python session with the openDAQ instance and library initialized and ready for use. The following variables are available in the session:
-
-- `daq` — the openDAQ python module
-- `daq_utils` — utility functions for working with openDAQ properties
-- `instance` — the openDAQ Instance with the loaded openDAQ module(s)
-
-See the [example code](https://docs.opendaq.com/manual/opendaq/3.30/tutorials/quick_start_setting_up_python.html#_testing_the_installation) for an example of these variables.
+This will open JupyterLab with the Python notebook, and the C# notebook if it was set up.
 
 #### Adding modules
 
@@ -146,7 +140,7 @@ where:
 
 * `INDEX` is the index of the node channel.
 
-If that fails, try powering the node off and then back on again. This should fix the issue. If commands can no longer be entered in the interactive terminal, press `Enter` one or two times.
+If that fails, try powering the node off and then back on again.
 
 ### Querying available property groups
 

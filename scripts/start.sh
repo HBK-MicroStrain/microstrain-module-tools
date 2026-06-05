@@ -16,4 +16,4 @@ echo "Activating virtual environment."
 source "$ACTIVATE"
 
 echo "Starting JupyterLab."
-jupyter lab
+jupyter lab python.ipynb csharp.ipynb
