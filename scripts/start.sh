@@ -15,5 +15,5 @@ fi
 echo "Activating virtual environment."
 source "$ACTIVATE"
 
-echo "Starting interactive session."
-$PYTHON -i daq_setup.py
+echo "Starting JupyterLab."
+jupyter lab
