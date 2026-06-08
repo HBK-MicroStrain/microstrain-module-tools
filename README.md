@@ -58,10 +58,21 @@ This will open JupyterLab with the available notebook templates.
 
 ### Adding modules
 
-Modules currently have to be copied over manually. Automatic module fetching is planned for a future update.
+By default, openDAQ loads modules from its installation directory. To load modules from a different location, set the `OPENDAQ_MODULE_PATH` environment variable to the desired directory. For example:
 
-For now, copy any new modules into the `modules/` folder, then restart the kernel in JupyterLab to pick up the changes.
+**Windows**
+```
+set OPENDAQ_MODULE_PATH=C:\Users\username\Downloads
+```
 
+**Mac/Linux**
+```
+export OPENDAQ_MODULE_PATH=~/Downloads
+```
+
+Restart the kernel whenever modules are added or updated to pick up the changes.
+
+> **Note:** If multiple versions of the same module exist in the directory, the behavior is undefined. Remove the old version before adding the new one.
 
 ## Usage
 
