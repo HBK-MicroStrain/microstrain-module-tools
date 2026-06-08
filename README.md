@@ -1,35 +1,34 @@
 # MicroStrain Module Tools
 
-A companion library and prototyping tool that enhances working with the MicroStrain Wireless OpenDAQ module.
+Companion tools to enhance working with the MicroStrain Wireless OpenDAQ module:
 
-Currently supports *Python* and *C#* bindings.
+| Tool                                                   | Supported Languages   |
+| ------------------------------------------------------ | --------------------- |
+| [Library](#library)                                    | C++, C#, Python |
+| [JupyterLab](#interactive-prototyping-tool) | C#, Python        |
 
-## Overview
-These tools are for working with openDAQ programmatically. For interfacing through GUI, see [AdvantageConnect](https://github.com/HBK-OneHBK/basic-recorder/actions/workflows/release.yml).
-
-### Library
+## Library
 
 `daq_utils` is a library that simplifies working with openDAQ through extensions tailored for MicroStrain modules.
 
-**NOTE:** This is only for importing the library into a separate project. This is handled automatically by the interactive prototyping tool.
-
-To use the library, import it into your project:
+To import the library into your project:
 
 ```python
 import daq_utils
-
-# Example usage
-daq_utils.print_channel_properties(channel)
 ```
 
-See [Usage](#usage) for more examples.
+See [Usage](#usage) for examples of how to use the library.
 
-### Interactive Prototyping Tool
-This tool provides a pre-configured Python session with an openDAQ instance ready to use out of the box — ideal for exploration, prototyping, and testing.
+## JupyterLab
+The [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment comes with notebook templates for each supported language, all pre-configured with an openDAQ instance ready to use out of the box.
 
-#### Setup
+Ideal for exploration, prototyping, and testing.
 
-Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies for the Python notebook. Add `--csharp` to also set up the C# notebook.
+### Setup
+
+Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies.
+
+The Python notebook template is setup by default. Add `--csharp` to also set up the C# notebook template.
 
 **Windows**
 ```
@@ -41,7 +40,7 @@ scripts\setup.bat
 ./scripts/setup.sh
 ```
 
-#### Running a Session
+### Running a Session
 
 Run the startup script:
 
@@ -55,29 +54,14 @@ scripts\start.bat
 ./scripts/start.sh
 ```
 
-This will open JupyterLab with the Python notebook, and the C# notebook if it was set up.
+This will open JupyterLab with the available notebook templates.
 
-#### Adding modules
+### Adding modules
 
 Modules currently have to be copied over manually. Automatic module fetching is planned for a future update.
 
-For now, copy any new modules into the `modules/` folder and reload the session:
+For now, copy any new modules into the `modules/` folder, then restart the kernel in JupyterLab to pick up the changes.
 
-```python
-reload_session()
-```
-
-This reloads the openDAQ instance and picks up any newly added modules.
-
-#### Updating the library
-
-If you update the library while a session is running, make the new features available immediately:
-
-```python
-reload_utils()
-```
-
-This will preserve the existing openDAQ instance and any connected devices, so you can continue working without interruption.
 
 ## Usage
 
