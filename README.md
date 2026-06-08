@@ -22,13 +22,13 @@ See [Usage](#usage) for examples of how to use the library.
 ## JupyterLab
 The [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment comes with notebook templates for each supported language, all pre-configured with an openDAQ instance ready to use out of the box.
 
-Ideal for exploration, prototyping, and testing.
+This is ideal for exploration, prototyping, and testing.
 
 ### Setup
 
 Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies.
 
-The Python notebook template is setup by default. Add `--csharp` to also set up the C# notebook template.
+The Python notebook template is set up by default. Add `--csharp` to also set up the C# notebook template.
 
 **Windows**
 ```
@@ -58,17 +58,33 @@ This will open JupyterLab with the available notebook templates.
 
 ### Adding modules
 
-By default, openDAQ loads modules from its installation directory. To load modules from a different location, set the `OPENDAQ_MODULE_PATH` environment variable to the desired directory. For example:
+By default, openDAQ loads modules from its installation directory. To load modules from a different location, set the `OPENDAQ_MODULE_PATH` environment variable to the desired directory.
+
+For example, to set it to the `Downloads` directory:
 
 **Windows**
 ```
-set OPENDAQ_MODULE_PATH=C:\Users\username\Downloads
+setx OPENDAQ_MODULE_PATH C:\Users\username\Downloads
 ```
 
-**Mac/Linux**
+> **Note:** `setx` takes effect in new terminal sessions, not the current one. Restart your terminal before launching JupyterLab.
+
+**Linux**
 ```
-export OPENDAQ_MODULE_PATH=~/Downloads
+touch ~/.bashrc && \
+sed -i '/^export OPENDAQ_MODULE_PATH=/d' ~/.bashrc && \
+echo 'export OPENDAQ_MODULE_PATH=~/Downloads' >> ~/.bashrc && \
+source ~/.bashrc
 ```
+
+**Mac**
+```
+touch ~/.bashrc && \
+sed -i '' '/^export OPENDAQ_MODULE_PATH=/d' ~/.bashrc && \
+echo 'export OPENDAQ_MODULE_PATH=~/Downloads' >> ~/.bashrc && \
+source ~/.bashrc
+```
+
 
 Restart the kernel whenever modules are added or updated to pick up the changes.
 

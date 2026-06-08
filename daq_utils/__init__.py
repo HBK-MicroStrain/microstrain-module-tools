@@ -1,7 +1,3 @@
-import importlib
-import inspect
-import sys
-
 import opendaq as daq
 
 
@@ -171,10 +167,10 @@ def call_function(root, path, *args):
 
     Example:
         # Function with no arguments
-        result = call_function(channel, "Config.Apply")
+        result = call_function(channel, "Setup.Configure.Apply")
 
         # Function with arguments
-        result = call_function(channel, "Features.ChannelType", 1)
+        result = call_function(channel, "Capabilities.ChannelType", 1)
 
         # Query the result
         print(result.get_property_value("Success"))
@@ -194,7 +190,7 @@ def find_property(channel, name):
 
     Example:
         find_property(channel, 'LostBeaconTimeout')
-        # => 'Config.LostBeaconTimeout'
+        # => 'Setup.Configure.Sampling.LostBeaconTimeout'
     """
     for prop in channel.visible_properties:
         if prop.value_type == daq.CoreType.ctObject:
@@ -226,59 +222,21 @@ def print_group_properties(channel, group):
         group: The name of the property group to query.
 
     Example:
-        print_group_properties(channel, 'Config')
+        print_group_properties(channel, 'Setup.Configure.Sampling')
     """
-    # Builds a list of tuples in the format: (property name, property type)
     rows = [
         (prop.name, str(prop.value_type).split('CoreType.')[-1])
         for prop in channel.get_property_value(group).visible_properties
     ]
 
-    # Computes the width of the widest entry in each of the columns, at least as wide as the header
     headers = ('Property', 'Type')
     col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
 
-    # Display header row
     print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
     print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
 
-    # Display rows
     for row in rows:
         print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
-
-
-def list_nodes(device):
-    """Prints a table of all wireless nodes discovered by the device.
-
-    Displays each node's index, ID, and model name.
-
-    Args:
-        device: The openDAQ device (wireless base station).
-    """
-    channels = device.get_channels()
-
-    if not channels:
-        print('No nodes found.')
-        return
-
-    # Builds a list of tuples in the format: (index, model name (node ID))
-    rows = [(str(i), channel.name) for i, channel in enumerate(channels)]
-
-    # Computes the width of the widest entry in each of the columns, at least as wide as the header
-    headers = ('#', 'Model (Node ID)')
-    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
-
-    print()
-
-    # Display header row
-    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
-    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
-
-    # Display rows
-    for row in rows:
-        print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
-
-    print()
 
 
 def print_channel_properties(channel):
@@ -290,7 +248,6 @@ def print_channel_properties(channel):
     Args:
         channel: The openDAQ channel to query properties from.
     """
-    # Builds a list of tuples in the format: (group name, property name, property type)
     rows = []
     for prop in channel.visible_properties:
         # Properties within a group
@@ -301,14 +258,11 @@ def print_channel_properties(channel):
         else:
             rows.append(('No group', prop.name, str(prop.value_type).split('CoreType.')[-1]))
 
-    # Computes the width of the widest entry in each of the columns, at least as wide as the header
     headers = ('Group', 'Property', 'Type')
     col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(3)]
 
-    # Display header row
     print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}} | {headers[2]:<{col_widths[2]}}')
     print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}-+-{"-" * col_widths[2]}')
 
-    # Display rows
     for row in rows:
         print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}} | {row[2]:<{col_widths[2]}}')
