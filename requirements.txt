@@ -1,2 +1,3 @@
 opendaq==3.30.3
 jupyterlab
+jupyterlab-templates

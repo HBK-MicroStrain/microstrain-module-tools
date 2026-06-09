@@ -1,11 +1,17 @@
 @echo off
 
-rem Change to the project root so all relative paths work regardless of where this
-rem script was called from.
-cd /d "%~dp0.."
+set REPO_ROOT=%~dp0..
+set TEMPLATES=%~dp0..\templates
+set WORKSPACE=%USERPROFILE%\opendaq-notebooks
 
 echo Activating virtual environment.
-call .venv\Scripts\activate
+call "%REPO_ROOT%\.venv\Scripts\activate"
+
+if not exist "%WORKSPACE%" mkdir "%WORKSPACE%"
+if not exist "%WORKSPACE%\python_starter.ipynb" copy "%TEMPLATES%\python_template.ipynb" "%WORKSPACE%\python_starter.ipynb" > nul
+if not exist "%WORKSPACE%\csharp_starter.ipynb" copy "%TEMPLATES%\csharp_template.ipynb" "%WORKSPACE%\csharp_starter.ipynb" > nul
+
+cd /d "%WORKSPACE%"
 
 echo Starting JupyterLab.
-jupyter lab python.ipynb csharp.ipynb
+jupyter lab --config="%REPO_ROOT%\jupyter_config.py" python_starter.ipynb csharp_starter.ipynb

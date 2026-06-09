@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 
-# Change to the project root so all relative paths work regardless of where this
-# script was called from.
-cd "$(dirname "${BASH_SOURCE[0]}")/.."
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TEMPLATES="$REPO_ROOT/templates"
+WORKSPACE="$HOME/opendaq-notebooks"
 
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-    ACTIVATE=".venv/Scripts/activate"
-    PYTHON="python"
+    ACTIVATE="$REPO_ROOT/.venv/Scripts/activate"
 else
-    ACTIVATE=".venv/bin/activate"
-    PYTHON="python3"
+    ACTIVATE="$REPO_ROOT/.venv/bin/activate"
 fi
 
 echo "Activating virtual environment."
 source "$ACTIVATE"
 
+mkdir -p "$WORKSPACE"
+[ -f "$WORKSPACE/python_starter.ipynb" ] || cp "$TEMPLATES/python_template.ipynb" "$WORKSPACE/python_starter.ipynb"
+[ -f "$WORKSPACE/csharp_starter.ipynb" ] || cp "$TEMPLATES/csharp_template.ipynb" "$WORKSPACE/csharp_starter.ipynb"
+
+cd "$WORKSPACE"
+
 echo "Starting JupyterLab."
-jupyter lab python.ipynb csharp.ipynb
+jupyter lab --config="$REPO_ROOT/jupyter_config.py" python_starter.ipynb csharp_starter.ipynb
