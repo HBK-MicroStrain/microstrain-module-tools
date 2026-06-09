@@ -147,36 +147,23 @@ daq_utils.groups(channel)
 
 ### Querying available properties
 
-To get a list of all available properties within a group:
+To print all properties across every group:
 
 ```python
-daq_utils.print_group_properties(channel, 'Config')
+daq_utils.print_properties(channel)
 ```
 
-This will print the property name and its type:
-
-```
-Property          | Type
-------------------+-------
-LostBeaconTimeout | ctInt
-Apply             | ctFunc
-EnableChannel     | ctBool
-```
-
-To print all properties for a channel across every group at once:
+To filter to a specific group:
 
 ```python
-daq_utils.print_channel_properties(channel)
+daq_utils.print_properties(channel, 'Setup.Configure.Sampling')
 ```
 
-This will print the group, property name, and type for every property. For example:
+To get the properties as a list instead:
 
-```
-Group  | Property          | Type
--------+-------------------+--------
-Config | LostBeaconTimeout | ctInt
-Config | Apply             | ctFunc
-Config | EnableChannel     | ctBool
+```python
+daq_utils.properties(channel)
+daq_utils.properties(channel, 'Setup.Configure.Sampling')
 ```
 
 ### Finding a property path

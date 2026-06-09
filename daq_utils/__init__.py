@@ -208,9 +208,6 @@ def groups(root):
     Args:
         root: The openDAQ object to query property groups from (channel, device, group, etc.).
     """
-    # DFS keeps related subgroups adjacent in output, which is more readable than BFS for a hierarchy.
-    # Otherwise, it would be like this: [Setup, Capabilities, ..., Setup.Configure, ...]
-
     result = []
     stack = [
         (root.get_property_value(prop.name), prop.name)
@@ -243,50 +240,43 @@ def print_groups(root):
     print('\n'.join(sorted(groups(root))))
 
 
-def print_group_properties(channel, group):
-    """Prints all properties within a group for a channel as an aligned table.
+def properties(root, group=None):
+    """Returns properties as a list of (group, name, type) tuples.
 
     Args:
-        channel: The openDAQ channel to query properties from.
-        group: The name of the property group to query.
-
-    Example:
-        print_group_properties(channel, 'Setup.Configure.Sampling')
-    """
-    rows = [
-        (prop.name, str(prop.value_type).split('CoreType.')[-1])
-        for prop in channel.get_property_value(group).visible_properties
-    ]
-
-    headers = ('Property', 'Type')
-    col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(2)]
-
-    print(f'{headers[0]:<{col_widths[0]}} | {headers[1]:<{col_widths[1]}}')
-    print(f'{"-" * col_widths[0]}-+-{"-" * col_widths[1]}')
-
-    for row in rows:
-        print(f'{row[0]:<{col_widths[0]}} | {row[1]:<{col_widths[1]}}')
-
-
-def print_channel_properties(channel):
-    """Prints all properties available on a channel, regardless of group.
-
-    Outputs in the following format:
-        Group Name | Property Name | Property Type
-
-    Args:
-        channel: The openDAQ channel to query properties from.
+        root: The openDAQ object to query properties from.
+        group: Optional dot-notation group path to filter properties.
     """
     rows = []
-    for prop in channel.visible_properties:
-        # Properties within a group
-        if prop.value_type == daq.CoreType.ctObject:
-            for child in channel.get_property_value(prop.name).visible_properties:
-                rows.append((prop.name, child.name, str(child.value_type).split('CoreType.')[-1]))
-        # Top-level properties that are not in a group, which we want to include as well
-        else:
-            rows.append(('No group', prop.name, str(prop.value_type).split('CoreType.')[-1]))
+    start_obj = root.get_property_value(group) if group else root
+    start_prefix = group or ''
 
+    stack = [(start_obj, start_prefix)]
+    while stack:
+        obj, prefix = stack.pop()
+        subgroups = []
+
+        for prop in obj.visible_properties:
+            path = f'{prefix}.{prop.name}' if prefix else prop.name
+            if prop.value_type == daq.CoreType.ctObject:
+                subgroups.append((obj.get_property_value(prop.name), path))
+            else:
+                rows.append((prefix or 'None', prop.name, str(prop.value_type).split('CoreType.')[-1]))
+
+        subgroups.reverse()
+        stack.extend(subgroups)
+
+    return rows
+
+
+def print_properties(root, group=None):
+    """Prints properties as an aligned table, sorted alphabetically by group then property name.
+
+    Args:
+        root: The openDAQ object to query properties from.
+        group: Optional dot-notation group path to filter properties.
+    """
+    rows = sorted(properties(root, group), key=lambda r: (r[0], r[1]))
     headers = ('Group', 'Property', 'Type')
     col_widths = [max(len(r[i]) for r in rows + [headers]) for i in range(3)]
 
