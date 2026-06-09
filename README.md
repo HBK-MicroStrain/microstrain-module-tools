@@ -168,15 +168,16 @@ daq_utils.properties(channel, 'Setup.Configure.Sampling')
 
 ### Finding a property path
 
-If you know a property name but not which group it belongs to, use `find_property` to get its full dot-notation path:
+If you know a property name but not its full path, use `find` to get its full dot-notation path:
 
 ```python
-daq_utils.find_property(channel, 'LostBeaconTimeout')
+daq_utils.find(channel, 'LostBeaconTimeout')
 ```
 
-This will output:
-```
-'Config.LostBeaconTimeout'
+This can also be used for finding groups:
+
+```python
+daq_utils.find(channel, 'Sampling')
 ```
 
 ### Accessing individual properties

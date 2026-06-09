@@ -178,28 +178,39 @@ def call_function(root, path, *args):
     return daq.IFunction.cast_from(root.get_property_value(path))(*args)
 
 
-def find_property(channel, name):
-    """Returns the full dot-notation path of a property given its name.
+def find(root, name):
+    """Returns the full dot-notation path of a property or group given its name.
 
-    Searches all groups and top-level properties on the channel.
-    Returns 'Property not found' if no matching property is found.
+    Searches all groups and subgroups. Returns 'Not found' if no match is found.
 
     Args:
-        channel: The openDAQ channel to search.
-        name: The property name to search for.
+        root: The openDAQ object to search (channel, device, group, etc.).
+        name: The property or group name to search for.
 
     Example:
-        find_property(channel, 'LostBeaconTimeout')
+        find(channel, 'LostBeaconTimeout')
         # => 'Setup.Configure.Sampling.LostBeaconTimeout'
+
+        find(channel, 'Sampling')
+        # => 'Setup.Configure.Sampling'
     """
-    for prop in channel.visible_properties:
-        if prop.value_type == daq.CoreType.ctObject:
-            for child in channel.get_property_value(prop.name).visible_properties:
-                if child.name == name:
-                    return f'{prop.name}.{name}'
-        elif prop.name == name:
-            return name
-    return 'Property not found'
+    stack = [(root, '')]
+
+    while stack:
+        obj, prefix = stack.pop()
+        subgroups = []
+
+        for prop in obj.visible_properties:
+            path = f'{prefix}.{prop.name}' if prefix else prop.name
+            if prop.name == name:
+                return path
+            if prop.value_type == daq.CoreType.ctObject:
+                subgroups.append((obj.get_property_value(prop.name), path))
+
+        subgroups.reverse()
+        stack.extend(subgroups)
+
+    return 'Not found'
 
 
 def groups(root):
