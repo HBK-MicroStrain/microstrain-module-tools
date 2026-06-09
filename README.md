@@ -196,7 +196,7 @@ channel.set_property_value('Setup.Configure.Sampling.LostBeaconTimeout', 7)
 
 ### Inspecting function properties
 
-To view a function property's description, arguments, and return type, read the `description` field directly from the property:
+To view a function property's description, arguments, and return type, read the `description` field from the property:
 
 ```python
 print(channel.get_property('Capabilities.MaxSweeps').description)
@@ -238,7 +238,7 @@ inspector.describe('MSCL_Wireless_AutoCalCompletionFlag')
 
 ### Creating typed values
 
-To create openDAQ typed values such as enumerations and structs, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
+To create openDAQ typed values such as `Enumerations` and `Structs`, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
 
 ```python
 daq_types = daq_utils.DaqTypeFactory(instance)
