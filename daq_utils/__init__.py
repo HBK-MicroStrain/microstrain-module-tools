@@ -8,15 +8,15 @@ class DaqTypeFactory:
         instance: The openDAQ Instance to retrieve the type manager from.
 
     Example:
-        types = daq_utils.DaqTypeFactory(instance)
-        voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+        daq_types = daq_utils.DaqTypeFactory(instance)
+        voltage = daq_types.enum("MSCL_Wireless_Voltage", "voltage_3000mV")
     """
 
     def __init__(self, instance):
         self._instance = instance
         self._type_manager = instance.context.type_manager
 
-    def enumeration(self, type_name, value_name):
+    def enum(self, type_name, value_name):
         """Creates an openDAQ Enumeration value.
 
         Args:
@@ -24,7 +24,7 @@ class DaqTypeFactory:
             value_name: The enum value name.
 
         Example:
-            voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+            voltage = daq_types.enum("MSCL_Wireless_Voltage", "voltage_3000mV")
         """
         return daq.Enumeration(daq.String(type_name), daq.String(value_name), self._type_manager)
 
@@ -38,7 +38,7 @@ class DaqTypeFactory:
                 openDAQ types (e.g. Enumeration) are passed through as-is.
 
         Example:
-            linear_eq = types.struct("MSCL_Wireless_LinearEquation", {"Slope": 1.0, "Offset": 0.0})
+            linear_eq = daq_types.struct("MSCL_Wireless_LinearEquation", {"Slope": 1.0, "Offset": 0.0})
         """
         daq_fields = daq.Dict()
 

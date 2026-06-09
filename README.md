@@ -241,15 +241,15 @@ inspector.describe('MSCL_Wireless_AutoCalCompletionFlag')
 To create openDAQ typed values such as enumerations and structs, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
 
 ```python
-types = daq_utils.DaqTypeFactory(instance)
+daq_types = daq_utils.DaqTypeFactory(instance)
 ```
 
 #### Creating an enum value
 
-Use `enumeration()`:
+Use `enum()`:
 
 ```python
-voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
+voltage = daq_types.enum("MSCL_Wireless_Voltage", "voltage_3000mV")
 ```
 
 #### Creating a Struct value
@@ -257,11 +257,17 @@ voltage = types.enumeration("MSCL_Wireless_Voltage", "voltage_3000mV")
 Pass a Python dict with the struct's fields to `struct()`. Python primitives are converted automatically, and openDAQ types such as enumerations are passed through as-is:
 
 ```python
-linear_eq = types.struct(
-    "MSCL_Wireless_LinearEquation",
+cmd_info = daq_types.struct(
+    "MSCL_Wireless_ShuntCalCmdInfo",
     {
-        "Slope": 1.0,
-        "Offset": 0.0
+        "UseInternalShunt": True,
+        "NumActiveGauges": 1,
+        "GaugeResistance": 350,
+        "ShuntResistance": 100000,
+        "GaugeFactor": 2.0,
+        "InputRange": daq_types.enum("MSCL_Wireless_InputRange", "range_14_545mV"),
+        "HardwareOffset": 0,
+        "ExcitationVoltage": daq_types.enum("MSCL_Wireless_Voltage", "voltage_1500mV")
     }
 )
 ```
