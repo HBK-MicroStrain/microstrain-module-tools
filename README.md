@@ -92,7 +92,7 @@ Restart the kernel whenever modules are added or updated to pick up the changes.
 
 ## Usage
 
-See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for a full reference on the openDAQ API.
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for a full reference on the openDAQ API. For wireless-specific usage, see the [Wireless guide](docs/WIRELESS.md).
 
 ### Discovering devices
 
@@ -105,7 +105,8 @@ for device_info in instance.available_devices:
 
 ### Adding devices
 
-Wireless base stations are represented as a device. Add one using it's connection string. For example:
+Add a device using its connection string:
+
 ```python
 device = instance.add_device('microstrain-wireless://COM46:3000000')
 ```
@@ -120,38 +121,15 @@ When you are ready to remove the device:
 instance.remove_device(device)
 ```
 
-This will disconnect the device so you can use it in other applications, such as `SensorConnect`.
-
-### Listing nodes
-
-To see all wireless nodes currently discovered by the device:
-
-```python
-daq_utils.list_nodes(device)
-```
-
-This will print a table of each node's index and info, for example:
-
-```
-# | Model (Node ID)
---+------------------------
-0 | G-Link-200-8g (33682)
-1 | G-Link-200-8g (33683)
-```
+This will disconnect the device so you can use it in other applications.
 
 ### Getting channels
 
-Wireless nodes are represented as channels. See [Listing nodes](#listing-nodes) to find the index of the node you want, then retrieve its channel:
+Get a reference to a channel using it's index:
 
 ```python
-channel = device.get_channels()[INDEX]
+channel = device.get_channels()[0]
 ```
-
-where:
-
-* `INDEX` is the index of the node channel.
-
-If that fails, try powering the node off and then back on again.
 
 ### Querying available property groups
 
@@ -159,12 +137,6 @@ Most properties are organized into `groups`. To get a list of all available prop
 
 ```python
 daq_utils.print_property_groups(channel)
-```
-
-You can then get a reference to the group:
-
-```python
-prop_group = channel.get_property_value('Config')
 ```
 
 ### Querying available properties
