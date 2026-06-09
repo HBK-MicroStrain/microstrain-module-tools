@@ -131,7 +131,7 @@ Get a reference to a channel using it's index:
 channel = device.get_channels()[0]
 ```
 
-### Querying available property groups
+### Getting property groups
 
 Properties are organized into `groups`. To print available property groups for a device, channel, group, or other root:
 
@@ -145,7 +145,7 @@ To get the groups as a list instead:
 daq_utils.groups(channel)
 ```
 
-### Querying available properties
+### Getting properties
 
 To print all properties across every group:
 
@@ -180,72 +180,46 @@ This can also be used for finding groups:
 daq_utils.find(channel, 'Sampling')
 ```
 
-### Accessing individual properties
+### Accessing properties
 
-Individual properties can be accessed in one of the following ways:
-* using dot notation on the channel (*recommended*)
-* via a group reference.
-
-For example, to get and set the lost beacon timeout property using dot notation:
+Properties can be accessed using dot-notation paths:
 
 ```python
-# Get the current timeout
-timeout = channel.get_property_value('Config.LostBeaconTimeout')
-
-# Print the property value
-print(f'Lost beacon timeout value: {timeout}')
-
-# Set a new timeout
-channel.set_property_value('Config.LostBeaconTimeout', 7)
+timeout = channel.get_property_value('Setup.Configure.Sampling.LostBeaconTimeout')
 ```
 
-### Querying function properties
-
-To inspect a function property's description, arguments, and return type, read the `description` field directly from the property:
+They can also be set:
 
 ```python
-print(channel.get_property('Features.MaxSweeps').description)
+channel.set_property_value('Setup.Configure.Sampling.LostBeaconTimeout', 7)
 ```
 
-This will output:
+### Inspecting function properties
 
-```
-Gets the maximum number of sweeps (or sweeps per burst) for the given sampling configuration.
+To view a function property's description, arguments, and return type, read the `description` field directly from the property:
 
-Arguments:
-    samplingMode: Enumeration<SamplingMode>
-    dataMode: Enumeration<DataMode>
-    dataFormat: Enumeration<DataFormat>
-    channelMask: Int
-
-Returns:
-    Success: Bool,
-    Result: Int
+```python
+print(channel.get_property('Capabilities.MaxSweeps').description)
 ```
 
 ### Calling function properties
 
-The easiest way to call function properties is using the wrapper:
+Function properties can be called directly through the openDAQ API, but the wrapper simplifies the syntax. To call a function with no arguments using the wrapper:
 
 ```python
-# Function with no arguments
-result = daq_utils.call_function(channel, "Config.Apply")
+result = daq_utils.call(channel, "Setup.Configure.Apply")
+```
 
-# Function with arguments
-result = daq_utils.call_function(channel, "Features.ChannelType", 1)
+To call a function with arguments:
+
+```python
+result = daq_utils.call(channel, "Capabilities.InputRangesWithVoltage", 0xFF, 5000)
 ```
 
 The result object can then be queried for any returned properties. For example:
 
 ```python
-# Did the function execute properly?
 success = result.get_property_value('Success')
-print(success)
-```
-
-This will output:
-```
-'True'
 ```
 
 ### Inspecting types

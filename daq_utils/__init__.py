@@ -149,7 +149,7 @@ def _field_type_label(value):
     return type(value).__name__
 
 
-def call_function(root, path, *args):
+def call(root, path, *args):
     """Calls an openDAQ function property and return its result.
 
     This function handles casting to a callable automatically.
@@ -167,10 +167,10 @@ def call_function(root, path, *args):
 
     Example:
         # Function with no arguments
-        result = call_function(channel, "Setup.Configure.Apply")
+        result = call(channel, "Setup.Configure.Apply")
 
         # Function with arguments
-        result = call_function(channel, "Capabilities.ChannelType", 1)
+        result = call(channel, "Capabilities.ChannelType", 1)
 
         # Query the result
         print(result.get_property_value("Success"))
