@@ -202,16 +202,45 @@ def find_property(channel, name):
     return 'Property not found'
 
 
-def print_property_groups(channel):
-    """Prints all property groups available on a channel.
+def groups(root):
+    """Returns all property groups and subgroups as dot-notation path strings.
 
     Args:
-        channel: The openDAQ channel to query property groups from.
+        root: The openDAQ object to query property groups from (channel, device, group, etc.).
     """
-    for prop in channel.visible_properties:
-        # Some top-level properties are not groups. We only want to print the groups.
-        if prop.value_type == daq.CoreType.ctObject:
-            print(prop.name)
+    # DFS keeps related subgroups adjacent in output, which is more readable than BFS for a hierarchy.
+    # Otherwise, it would be like this: [Setup, Capabilities, ..., Setup.Configure, ...]
+
+    result = []
+    stack = [
+        (root.get_property_value(prop.name), prop.name)
+        for prop in root.visible_properties
+        if prop.value_type == daq.CoreType.ctObject
+    ]
+    stack.reverse()
+
+    while stack:
+        obj, path = stack.pop()
+        result.append(path)
+
+        subgroups = [
+            (obj.get_property_value(prop.name), f'{path}.{prop.name}')
+            for prop in obj.visible_properties
+            if prop.value_type == daq.CoreType.ctObject
+        ]
+        subgroups.reverse()
+        stack.extend(subgroups)
+
+    return result
+
+
+def print_groups(root):
+    """Prints all property groups and subgroups using dot-notation paths, sorted alphabetically.
+
+    Args:
+        root: The openDAQ object to query property groups from (channel, device, group, etc.).
+    """
+    print('\n'.join(sorted(groups(root))))
 
 
 def print_group_properties(channel, group):

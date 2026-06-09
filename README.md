@@ -133,10 +133,16 @@ channel = device.get_channels()[0]
 
 ### Querying available property groups
 
-Most properties are organized into `groups`. To get a list of all available property groups for a channel:
+Properties are organized into `groups`. To print available property groups for a device, channel, group, or other root:
 
 ```python
-daq_utils.print_property_groups(channel)
+daq_utils.print_groups(channel)
+```
+
+To get the groups as a list instead:
+
+```python
+daq_utils.groups(channel)
 ```
 
 ### Querying available properties
