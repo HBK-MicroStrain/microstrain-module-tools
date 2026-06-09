@@ -223,45 +223,17 @@ success = result.get_property_value('Success')
 ```
 
 ### Inspecting types
-To view what fields/values are available for openDAQ types such as enumerations and structs, create a `DaqTypeInspector`:
+
+To view what fields/values are available for openDAQ `Enumeration` and `Struct` types, create a `DaqTypeInspector`:
 
 ```python
 inspector = daq_utils.DaqTypeInspector(instance)
 ```
 
-#### Enums
-
-To see all valid values for an enum:
+To inspect a type:
 
 ```python
-inspector.describe_enum('MSCL_Wireless_AutoCalCompletionFlag')
-```
-
-This will output:
-
-```
-Enumerator
-----------
-autocal_success
-autocal_maybeInvalid_applied
-autocal_maybeInvalid_notApplied
-autocal_notComplete
-```
-
-#### Structs
-
-To see the fields and their types for a struct:
-```python
-inspector.describe_struct('MSCL_Wireless_LinearEquation')
-```
-
-This will output:
-
-```
-Field  | Type
--------+------
-Slope  | Float
-Offset | Float
+inspector.describe('MSCL_Wireless_AutoCalCompletionFlag')
 ```
 
 ### Creating typed values

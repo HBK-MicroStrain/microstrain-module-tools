@@ -63,8 +63,8 @@ class DaqTypeInspector:
 
     Example:
         inspector = daq_utils.DaqTypeInspector(instance)
-        inspector.describe_struct("MSCL_Wireless_ShuntCalCmdInfo")
-        inspector.describe_enum("MSCL_Wireless_Voltage")
+        inspector.describe("MSCL_Wireless_ShuntCalCmdInfo")
+        inspector.describe("MSCL_Wireless_Voltage")
     """
 
     def __init__(self, instance):
@@ -76,17 +76,25 @@ class DaqTypeInspector:
         # NOTE: Temporary workaround — remove once the openDAQ version is updated with a fix.
         self._enum_name_cache: dict[str, list[str]] = {}
 
-    def describe_enum(self, type_name):
-        """Prints the enumerator names for a registered enum type.
+    def describe(self, type_name):
+        """Prints the fields and values for a registered enum or struct type.
 
         Args:
-            type_name: The full registered enum type name.
+            type_name: The full registered type name.
 
         Example:
-            inspector.describe_enum("MSCL_Wireless_AutoCalCompletionFlag")
+            inspector.describe("MSCL_Wireless_AutoCalCompletionFlag")
+            inspector.describe("MSCL_Wireless_LinearEquation")
         """
+        type_obj = self._instance.context.type_manager.get_type(type_name)
+
+        if daq.IEnumerationType.can_cast_from(type_obj):
+            self._describe_enum(type_name, type_obj)
+        else:
+            self._describe_struct(type_name, type_obj)
+
+    def _describe_enum(self, type_name, type_obj):
         if type_name not in self._enum_name_cache:
-            type_obj = self._instance.context.type_manager.get_type(type_name)
             enum_type = daq.IEnumerationType.cast_from(type_obj)
             self._enum_name_cache[type_name] = [str(k) for k in enum_type.as_dictionary]
 
@@ -103,16 +111,7 @@ class DaqTypeInspector:
 
         print()
 
-    def describe_struct(self, type_name):
-        """Prints the fields and their types for a registered struct type.
-
-        Args:
-            type_name: The full registered struct type name.
-
-        Example:
-            inspector.describe_struct("MSCL_Wireless_LinearEquation")
-        """
-        type_obj = self._instance.context.type_manager.get_type(type_name)
+    def _describe_struct(self, type_name, type_obj):
         struct_type = daq.IStructType.cast_from(type_obj)
         builder = daq.StructBuilder(daq.String(type_name), self._instance.context.type_manager)
 
