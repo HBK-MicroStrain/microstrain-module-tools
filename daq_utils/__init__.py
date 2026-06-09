@@ -177,6 +177,28 @@ def call(root, path, *args):
     return daq.IFunction.cast_from(root.get_property_value(path))(*args)
 
 
+def _depth_first_search(root, prefix=''):
+    """Depth-first search generator that yields (obj, prop, prefix, path) for every visible property."""
+
+    # Uses a stack with reversed insertion to maintain original property order. This keeps related subgroups
+    # adjacent in output (e.g. [Setup, Setup.Configure, Setup.Configure.Sampling, ...]) vs. breadth-first which
+    # interleaves levels (e.g. [Setup, Capabilities, ..., Setup.Configure, ...]).
+    stack = [(root, prefix)]
+
+    while stack:
+        obj, prefix = stack.pop()
+        subgroups = []
+
+        for prop in obj.visible_properties:
+            path = f'{prefix}.{prop.name}' if prefix else prop.name
+            yield obj, prop, prefix, path
+            if prop.value_type == daq.CoreType.ctObject:
+                subgroups.append((obj.get_property_value(prop.name), path))
+
+        subgroups.reverse()
+        stack.extend(subgroups)
+
+
 def find(root, name):
     """Returns the full dot-notation path of a property or group given its name.
 
@@ -193,23 +215,10 @@ def find(root, name):
         find(channel, 'Sampling')
         # => 'Setup.Configure.Sampling'
     """
-    stack = [(root, '')]
-
-    while stack:
-        obj, prefix = stack.pop()
-        subgroups = []
-
-        for prop in obj.visible_properties:
-            path = f'{prefix}.{prop.name}' if prefix else prop.name
-            if prop.name == name:
-                return path
-            if prop.value_type == daq.CoreType.ctObject:
-                subgroups.append((obj.get_property_value(prop.name), path))
-
-        subgroups.reverse()
-        stack.extend(subgroups)
-
-    return 'Not found'
+    return next(
+        (path for _, prop, _, path in _depth_first_search(root) if prop.name == name),
+        'Not found'
+    )
 
 
 def groups(root):
@@ -218,27 +227,10 @@ def groups(root):
     Args:
         root: The openDAQ object to query property groups from (channel, device, group, etc.).
     """
-    result = []
-    stack = [
-        (root.get_property_value(prop.name), prop.name)
-        for prop in root.visible_properties
+    return [
+        path for _, prop, _, path in _depth_first_search(root)
         if prop.value_type == daq.CoreType.ctObject
     ]
-    stack.reverse()
-
-    while stack:
-        obj, path = stack.pop()
-        result.append(path)
-
-        subgroups = [
-            (obj.get_property_value(prop.name), f'{path}.{prop.name}')
-            for prop in obj.visible_properties
-            if prop.value_type == daq.CoreType.ctObject
-        ]
-        subgroups.reverse()
-        stack.extend(subgroups)
-
-    return result
 
 
 def print_groups(root):
@@ -257,26 +249,14 @@ def properties(root, group=None):
         root: The openDAQ object to query properties from.
         group: Optional dot-notation group path to filter properties.
     """
-    rows = []
     start_obj = root.get_property_value(group) if group else root
     start_prefix = group or ''
 
-    stack = [(start_obj, start_prefix)]
-    while stack:
-        obj, prefix = stack.pop()
-        subgroups = []
-
-        for prop in obj.visible_properties:
-            path = f'{prefix}.{prop.name}' if prefix else prop.name
-            if prop.value_type == daq.CoreType.ctObject:
-                subgroups.append((obj.get_property_value(prop.name), path))
-            else:
-                rows.append((prefix or 'None', prop.name, str(prop.value_type).split('CoreType.')[-1]))
-
-        subgroups.reverse()
-        stack.extend(subgroups)
-
-    return rows
+    return [
+        (prefix or 'None', prop.name, str(prop.value_type).split('CoreType.')[-1])
+        for _, prop, prefix, _ in _depth_first_search(start_obj, start_prefix)
+        if prop.value_type != daq.CoreType.ctObject
+    ]
 
 
 def print_properties(root, group=None):
