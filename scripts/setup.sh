@@ -4,18 +4,25 @@
 # script was called from.
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+INSTALL_PYTHON=false
 INSTALL_CSHARP=false
 
 for arg in "$@"; do
     case $arg in
+        --python) INSTALL_PYTHON=true ;;
         --csharp) INSTALL_CSHARP=true ;;
         *)
             echo "Unknown option: $arg"
-            echo "Usage: setup.sh [--csharp]"
+            echo "Usage: setup.sh [--python] [--csharp]"
             exit 1
             ;;
     esac
 done
+
+if [[ "$INSTALL_PYTHON" == false && "$INSTALL_CSHARP" == false ]]; then
+    echo "Specify at least one of --python or --csharp."
+    exit 1
+fi
 
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
     PYTHON="python"
@@ -42,6 +49,17 @@ source "$ACTIVATE"
 echo "Installing Python dependencies."
 pip install -r requirements.txt
 
+WORKSPACE="$HOME/opendaq-notebooks"
+mkdir -p "$WORKSPACE"
+
+if [[ "$INSTALL_PYTHON" == true ]]; then
+    dest="$WORKSPACE/python_starter.ipynb"
+    if [[ ! -f "$dest" ]]; then
+        cp "$(dirname "${BASH_SOURCE[0]}")/../templates/python/python_template.ipynb" "$dest"
+        echo "Copied Python starter notebook."
+    fi
+fi
+
 if [[ "$INSTALL_CSHARP" == true ]]; then
     if [[ ! -d "$DOTNET_JUPYTER_DIR" ]]; then
         echo "Setting up dedicated .NET environment for Jupyter."
@@ -56,6 +74,12 @@ if [[ "$INSTALL_CSHARP" == true ]]; then
         "$DOTNET_JUPYTER_DIR/tools/dotnet-interactive" jupyter install
     else
         echo "Dedicated .NET environment for Jupyter already exists, skipping."
+    fi
+
+    dest="$WORKSPACE/csharp_starter.ipynb"
+    if [[ ! -f "$dest" ]]; then
+        cp "$(dirname "${BASH_SOURCE[0]}")/../templates/csharp/csharp_template.ipynb" "$dest"
+        echo "Copied C# starter notebook."
     fi
 fi
 

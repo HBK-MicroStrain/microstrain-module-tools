@@ -26,18 +26,20 @@ This is ideal for exploration, prototyping, and testing.
 
 ### Setup
 
-Run the setup script after cloning the repo. This will create a virtual environment and install all dependencies.
+Run the setup script after cloning the repo, passing the following arguments for languages to use:
+* `--python`
+* `--csharp`
 
-The Python notebook template is set up by default. Add `--csharp` to also set up the C# notebook template.
+This will create a virtual environment, install all dependencies, and create starter notebooks for each selected language.
 
 **Windows**
 ```
-scripts\setup.bat
+scripts\setup.bat --python --csharp
 ```
 
 **Linux/Mac**
 ```
-./scripts/setup.sh
+./scripts/setup.sh --python --csharp
 ```
 
 ### Running a Session
@@ -54,7 +56,21 @@ scripts\start.bat
 ./scripts/start.sh
 ```
 
-This will open JupyterLab with the available notebook templates.
+This will open JupyterLab automatically in a web browser.
+
+### Creating New Notebooks
+
+To create a new notebook from a template, click the new launcher button:
+
+![New launcher button in JupyterLab](docs/images/new-launcher-button.png)
+
+Then, click the `Template` tile in the `Notebook` section:
+
+![Template button in JupyterLab instance launcher](docs/images/template-tile.png)
+
+Then, select the desired language and template:
+
+![Template selector in JupyterLab instance launcher](docs/images/template-selector.png)
 
 ### Adding modules
 
