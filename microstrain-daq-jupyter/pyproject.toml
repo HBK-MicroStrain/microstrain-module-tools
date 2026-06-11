@@ -14,11 +14,12 @@ dependencies = [
 
 [tool.hatch.version]
 source = "vcs"
+raw-options = { root = ".." }
 
 [tool.hatch.build.targets.wheel]
 packages = ["daq_jupyter"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "daq_jupyter/jupyter_config/microstrain_daq_jupyter.json" = "etc/jupyter/jupyter_server_config.d/microstrain_daq_jupyter.json"
-"daq_jupyter/templates/python/python_template.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/python_template.ipynb"
-"daq_jupyter/templates/csharp/csharp_template.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/csharp_template.ipynb"
+"daq_jupyter/templates/python/python_starter.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/python_starter.ipynb"
+"daq_jupyter/templates/csharp/csharp_starter.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/csharp_starter.ipynb"

@@ -70,9 +70,15 @@ Then, click the `Template` tile in the `Notebook` section:
 
 ![Template button in JupyterLab instance launcher](docs/images/template-tile.png)
 
-Then, select the desired language and template:
+Then, select the desired template:
 
 ![Template selector in JupyterLab instance launcher](docs/images/template-selector.png)
+
+#### Available Templates
+
+| Template | Languages  | Description |
+|----------|------------|-------------|
+| Starter  | Python, C# | Pre-configured openDAQ and library setup ready to use |
 
 ### Adding modules
 

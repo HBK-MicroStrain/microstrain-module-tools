@@ -16,6 +16,7 @@ jupyter = ["microstrain-daq-jupyter"]
 
 [tool.hatch.version]
 source = "vcs"
+raw-options = { root = ".." }
 
 [tool.hatch.build.targets.wheel]
 packages = ["daq_utils"]
