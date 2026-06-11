@@ -1,11 +1,11 @@
-# MicroStrain Module Tools
+# MicroStrain DAQ
 
 Companion tools to enhance working with the MicroStrain Wireless OpenDAQ module:
 
 | Tool                                                   | Supported Languages   |
 | ------------------------------------------------------ | --------------------- |
 | [Library](#library)                                    | C++, C#, Python |
-| [JupyterLab](#interactive-prototyping-tool) | C#, Python        |
+| [JupyterLab](#interactive-prototyping-tool) | Python        |
 
 ## Library
 
@@ -26,7 +26,7 @@ import daq_utils
 See [Usage](#usage) for examples of how to use the library.
 
 ## JupyterLab
-The [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment comes with notebook templates for each supported language, all pre-configured with an openDAQ instance ready to use out of the box.
+The [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment comes with Python notebook templates pre-configured for various use cases.
 
 This is ideal for exploration, prototyping, and testing.
 
@@ -36,21 +36,7 @@ This is ideal for exploration, prototyping, and testing.
 pip install microstrain-daq-jupyter
 ```
 
-> **Note:** Notebook templates require the [Library](#library) to be installed for the relevant language(s).
-
-### C# Setup
-
-C# notebooks require the .NET SDK and `dotnet-interactive`. After installing the .NET SDK (version 8.0 or later):
-
-```
-dotnet tool install -g Microsoft.dotnet-interactive
-```
-
-Then:
-
-```
-dotnet interactive jupyter install
-```
+> **Note:** Notebook templates require the [Library](#library) to be installed.
 
 ### Running a Session
 
@@ -76,9 +62,9 @@ Then, select the desired template:
 
 #### Available Templates
 
-| Template | Languages  | Description |
-|----------|------------|-------------|
-| Starter  | Python, C# | Pre-configured openDAQ and library setup ready to use |
+| Template | Description |
+|----------|-------------|
+| Starter  | Pre-configured openDAQ and library setup ready to use |
 
 ### Adding modules
 

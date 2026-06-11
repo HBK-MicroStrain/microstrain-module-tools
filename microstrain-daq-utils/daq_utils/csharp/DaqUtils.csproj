@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Daq.Utils</RootNamespace>
+    <AssemblyName>Daq.Utils</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="*" PrivateAssets="all" />
+    <PackageReference Include="openDAQ.Net" Version="*" />
+  </ItemGroup>
+
+</Project>

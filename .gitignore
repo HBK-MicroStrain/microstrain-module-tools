@@ -1,3 +1,7 @@
+# C# build outputs
+bin/
+obj/
+
 # Track the modules directory but ignore its contents
 /modules/*
 !/modules/.gitkeep
