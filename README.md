@@ -11,6 +11,12 @@ Companion tools to enhance working with the MicroStrain Wireless OpenDAQ module:
 
 `daq_utils` is a library that simplifies working with openDAQ through extensions tailored for MicroStrain modules.
 
+### Installation
+
+```
+pip install microstrain-daq-utils
+```
+
 To import the library into your project:
 
 ```python
@@ -24,39 +30,35 @@ The [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) environment comes
 
 This is ideal for exploration, prototyping, and testing.
 
-### Setup
+### Installation
 
-Run the setup script after cloning the repo, passing the following arguments for languages to use:
-* `--python`
-* `--csharp`
-
-This will create a virtual environment, install all dependencies, and create starter notebooks for each selected language.
-
-**Windows**
 ```
-scripts\setup.bat --python --csharp
+pip install microstrain-daq-jupyter
 ```
 
-**Linux/Mac**
+> **Note:** Notebook templates require the [Library](#library) to be installed for the relevant language(s).
+
+### C# Setup
+
+C# notebooks require the .NET SDK and `dotnet-interactive`. After installing the .NET SDK (version 8.0 or later):
+
 ```
-./scripts/setup.sh --python --csharp
+dotnet tool install -g Microsoft.dotnet-interactive
+```
+
+Then:
+
+```
+dotnet interactive jupyter install
 ```
 
 ### Running a Session
 
-Run the startup script:
+Navigate to the directory where you would like to save your notebooks and launch JupyterLab:
 
-**Windows**
 ```
-scripts\start.bat
+jupyter lab
 ```
-
-**Linux/Mac**
-```
-./scripts/start.sh
-```
-
-This will open JupyterLab automatically in a web browser.
 
 ### Creating New Notebooks
 

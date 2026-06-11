@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "microstrain-daq-utils"
+dynamic = ["version"]
+description = "Python utilities for MicroStrain openDAQ module validation"
+requires-python = ">=3.9"
+dependencies = [
+    "opendaq==3.30.3",
+]
+
+[project.optional-dependencies]
+jupyter = ["microstrain-daq-jupyter"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["daq_utils"]

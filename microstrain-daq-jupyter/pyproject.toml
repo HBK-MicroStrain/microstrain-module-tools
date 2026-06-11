@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "microstrain-daq-jupyter"
+dynamic = ["version"]
+description = "JupyterLab templates for MicroStrain openDAQ validation"
+requires-python = ">=3.9"
+dependencies = [
+    "jupyterlab>=4",
+    "jupyterlab-templates>=0.5",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["daq_jupyter"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"daq_jupyter/jupyter_config/microstrain_daq_jupyter.json" = "etc/jupyter/jupyter_server_config.d/microstrain_daq_jupyter.json"
+"daq_jupyter/templates/python/python_template.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/python_template.ipynb"
+"daq_jupyter/templates/csharp/csharp_template.ipynb" = "share/jupyter/notebook_templates/MicroStrain Wireless/csharp_template.ipynb"
