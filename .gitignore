@@ -1,6 +1,7 @@
 # C# build outputs
 bin/
 obj/
+packages/
 
 # Track the modules directory but ignore its contents
 /modules/*

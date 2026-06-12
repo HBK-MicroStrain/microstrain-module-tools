@@ -13,6 +13,8 @@ Companion tools to enhance working with the MicroStrain Wireless OpenDAQ module:
 
 ### Installation
 
+#### Python
+
 ```
 pip install microstrain-daq-utils
 ```
@@ -21,6 +23,18 @@ To import the library into your project:
 
 ```python
 import daq_utils
+```
+
+#### C#
+
+```
+dotnet add package MicroStrain.DaqUtils
+```
+
+To import the library into your project:
+
+```csharp
+using Daq.Utils;
 ```
 
 See [Usage](#usage) for examples of how to use the library.
@@ -66,6 +80,10 @@ Then, select the desired template:
 |----------|-------------|
 | Starter  | Pre-configured openDAQ and library setup ready to use |
 
+## Usage
+
+See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for a full reference on the openDAQ API. For wireless-specific usage, see the [Wireless guide](docs/WIRELESS.md).
+
 ### Adding modules
 
 By default, openDAQ loads modules from its installation directory. To load modules from a different location, set the `OPENDAQ_MODULE_PATH` environment variable to the desired directory.
@@ -77,7 +95,7 @@ For example, to set it to the `Downloads` directory:
 setx OPENDAQ_MODULE_PATH C:\Users\username\Downloads
 ```
 
-> **Note:** `setx` takes effect in new terminal sessions, not the current one. Restart your terminal before launching JupyterLab.
+> **Note:** `setx` takes effect in new terminal sessions, not the current one. Restart your terminal after running this command.
 
 **Linux**
 ```
@@ -95,14 +113,31 @@ echo 'export OPENDAQ_MODULE_PATH=~/Downloads' >> ~/.bashrc && \
 source ~/.bashrc
 ```
 
-
-Restart the kernel whenever modules are added or updated to pick up the changes.
-
 > **Note:** If multiple versions of the same module exist in the directory, the behavior is undefined. Remove the old version before adding the new one.
 
-## Usage
+Then pass the path when creating your openDAQ instance:
 
-See the openDAQ [documentation](https://docs.opendaq.com/manual/opendaq/3.30/introduction.html) for a full reference on the openDAQ API. For wireless-specific usage, see the [Wireless guide](docs/WIRELESS.md).
+**Python**
+```python
+import os
+import opendaq as daq
+
+builder = daq.InstanceBuilder()
+if module_path := os.environ.get('OPENDAQ_MODULE_PATH'):
+    builder.module_path = module_path
+instance = builder.build()
+```
+
+**C#**
+```csharp
+using Daq.Core.OpenDAQ;
+
+var builder = OpenDAQFactory.InstanceBuilder();
+var modulePath = Environment.GetEnvironmentVariable("OPENDAQ_MODULE_PATH");
+if (modulePath != null)
+    builder.ModulePath = modulePath;
+var instance = builder.Build();
+```
 
 ### Discovering devices
 

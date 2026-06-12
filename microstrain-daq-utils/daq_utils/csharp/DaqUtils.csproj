@@ -6,11 +6,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Daq.Utils</RootNamespace>
     <AssemblyName>Daq.Utils</AssemblyName>
+    <PackageId>MicroStrain.DaqUtils</PackageId>
+    <Description>A library that simplifies working with openDAQ through extensions tailored for MicroStrain modules.</Description>
+    <Authors>MicroStrain</Authors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" Version="*" PrivateAssets="all" />
-    <PackageReference Include="openDAQ.Net" Version="*" />
+    <Reference Include="openDAQ.Net">
+      <HintPath>opendaq-net\lib\net8.0\openDAQ.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="opendaq-net\LICENSE" Pack="true" PackagePath="LICENSE-openDAQ" />
+    <None Include="opendaq-net\lib\net8.0\openDAQ.Net.dll" Pack="true" PackagePath="lib\net8.0\" />
+    <None Include="opendaq-net\lib\net8.0\openDAQ.Net.xml" Pack="true" PackagePath="lib\net8.0\" />
+    <None Include="opendaq-net\runtimes\win-x64\native\*.dll" Pack="true" PackagePath="runtimes\win-x64\native\" />
+    <None Include="opendaq-net\runtimes\win-x64\native\modules\*.dll" Pack="true" PackagePath="runtimes\win-x64\native\modules\" />
+    <None Include="opendaq-net\runtimes\linux-x64\native\*.so" Pack="true" PackagePath="runtimes\linux-x64\native\" />
+    <None Include="opendaq-net\runtimes\linux-x64\native\modules\*.so" Pack="true" PackagePath="runtimes\linux-x64\native\modules\" />
   </ItemGroup>
 
 </Project>

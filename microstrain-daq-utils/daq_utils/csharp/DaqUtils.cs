@@ -38,10 +38,10 @@ public class DaqTypeFactory
     /// </summary>
     public Struct MakeStruct(string typeName, IDictionary<string, object> fields)
     {
-        var daqFields = CoreTypesFactory.CreateDict<StringObject, BaseObject>(
-            fields.Select(kv => ((StringObject)kv.Key, ToBaseObject(kv.Value))).ToArray()
+        var daqFields = CoreTypesFactory.CreateDict<BaseObject, BaseObject>(
+            fields.Select(kv => ((BaseObject)(StringObject)kv.Key, ToBaseObject(kv.Value))).ToArray()
         );
-        return Struct.CreateStruct(typeName, daqFields, _typeManager);
+        return CoreTypesFactory.CreateStruct(typeName, daqFields, _typeManager);
     }
 
     private static BaseObject ToBaseObject(object value) => value switch
@@ -180,10 +180,10 @@ public static class DaqUtils
     ///   var result = DaqUtils.Call(channel, "Capabilities.ChannelType", (IntegerObject)1);
     ///   Console.WriteLine(result.Cast&lt;PropertyObject&gt;().GetPropertyValue("Success"));
     /// </summary>
-    public static BaseObject Call(PropertyObject root, string path, params BaseObject[] args)
+    public static BaseObject? Call(PropertyObject root, string path, params BaseObject[] args)
     {
         var value = root.GetPropertyValue(path);
-        var param = args.Length == 0 ? null
+        BaseObject? param = args.Length == 0 ? null
             : args.Length == 1 ? args[0]
             : (BaseObject)CoreTypesFactory.CreateList<BaseObject>(args);
 
@@ -233,7 +233,7 @@ public static class DaqUtils
     /// Example:
     ///   var props = DaqUtils.Properties(channel, "Setup.Configure.Sampling");
     /// </summary>
-    public static List<(string group, string name, string type)> Properties(PropertyObject root, string group = null)
+    public static List<(string group, string name, string type)> Properties(PropertyObject root, string? group = null)
     {
         var startObj = group != null ? root.GetPropertyValue(group).Cast<PropertyObject>() : root;
         var startPrefix = group ?? "";
@@ -255,7 +255,7 @@ public static class DaqUtils
     ///   DaqUtils.PrintProperties(channel);
     ///   DaqUtils.PrintProperties(channel, "Setup.Configure.Sampling");
     /// </summary>
-    public static void PrintProperties(PropertyObject root, string group = null)
+    public static void PrintProperties(PropertyObject root, string? group = null)
     {
         var rows = Properties(root, group).OrderBy(r => (r.group, r.name)).ToList();
         if (rows.Count == 0) return;
