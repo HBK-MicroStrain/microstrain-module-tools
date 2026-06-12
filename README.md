@@ -143,17 +143,30 @@ var instance = builder.Build();
 
 This code snippet will display a list of all currently available devices:
 
+**Python**
 ```python
 for device_info in instance.available_devices:
     print('Name:', device_info.name, 'Connection string:', device_info.connection_string)
+```
+
+**C#**
+```csharp
+foreach (var deviceInfo in instance.AvailableDevices)
+    Console.WriteLine($"Name: {deviceInfo.Name} Connection string: {deviceInfo.ConnectionString}");
 ```
 
 ### Adding devices
 
 Add a device using its connection string:
 
+**Python**
 ```python
 device = instance.add_device('microstrain-wireless://COM46:3000000')
+```
+
+**C#**
+```csharp
+var device = instance.AddDevice("microstrain-wireless://COM46:3000000");
 ```
 
 Connection strings are in the format: `prefix://address`.
@@ -162,8 +175,14 @@ Connection strings are in the format: `prefix://address`.
 
 When you are ready to remove the device:
 
+**Python**
 ```python
 instance.remove_device(device)
+```
+
+**C#**
+```csharp
+instance.RemoveDevice(device);
 ```
 
 This will disconnect the device so you can use it in other applications.
@@ -172,135 +191,243 @@ This will disconnect the device so you can use it in other applications.
 
 Get a reference to a channel using it's index:
 
+**Python**
 ```python
 channel = device.get_channels()[0]
+```
+
+**C#**
+```csharp
+var channel = device.GetChannels()[0];
 ```
 
 ### Getting property groups
 
 Properties are organized into `groups`. To print available property groups for a device, channel, group, or other root:
 
+**Python**
 ```python
 daq_utils.print_groups(channel)
 ```
 
+**C#**
+```csharp
+DaqUtils.PrintGroups(channel);
+```
+
 To get the groups as a list instead:
 
+**Python**
 ```python
 daq_utils.groups(channel)
+```
+
+**C#**
+```csharp
+DaqUtils.Groups(channel);
 ```
 
 ### Getting properties
 
 To print all properties across every group:
 
+**Python**
 ```python
 daq_utils.print_properties(channel)
 ```
 
+**C#**
+```csharp
+DaqUtils.PrintProperties(channel);
+```
+
 To filter to a specific group:
 
+**Python**
 ```python
 daq_utils.print_properties(channel, 'Setup.Configure.Sampling')
 ```
 
+**C#**
+```csharp
+DaqUtils.PrintProperties(channel, "Setup.Configure.Sampling");
+```
+
 To get the properties as a list instead:
 
+**Python**
 ```python
 daq_utils.properties(channel)
 daq_utils.properties(channel, 'Setup.Configure.Sampling')
+```
+
+**C#**
+```csharp
+DaqUtils.Properties(channel);
+DaqUtils.Properties(channel, "Setup.Configure.Sampling");
 ```
 
 ### Finding a property path
 
 If you know a property name but not its full path, use `find` to get its full dot-notation path:
 
+**Python**
 ```python
 daq_utils.find(channel, 'LostBeaconTimeout')
 ```
 
+**C#**
+```csharp
+DaqUtils.Find(channel, "LostBeaconTimeout");
+```
+
 This can also be used for finding groups:
 
+**Python**
 ```python
 daq_utils.find(channel, 'Sampling')
+```
+
+**C#**
+```csharp
+DaqUtils.Find(channel, "Sampling");
 ```
 
 ### Accessing properties
 
 Properties can be accessed using dot-notation paths:
 
+**Python**
 ```python
 timeout = channel.get_property_value('Setup.Configure.Sampling.LostBeaconTimeout')
 ```
 
+**C#**
+```csharp
+var timeout = channel.GetPropertyValue("Setup.Configure.Sampling.LostBeaconTimeout");
+```
+
 They can also be set:
 
+**Python**
 ```python
 channel.set_property_value('Setup.Configure.Sampling.LostBeaconTimeout', 7)
+```
+
+**C#**
+```csharp
+channel.SetPropertyValue("Setup.Configure.Sampling.LostBeaconTimeout", (IntegerObject)7);
 ```
 
 ### Inspecting function properties
 
 To view a function property's description, arguments, and return type, read the `description` field from the property:
 
+**Python**
 ```python
 print(channel.get_property('Capabilities.MaxSweeps').description)
+```
+
+**C#**
+```csharp
+Console.WriteLine(channel.GetProperty("Capabilities.MaxSweeps").Description);
 ```
 
 ### Calling function properties
 
 Function properties can be called directly through the openDAQ API, but the wrapper simplifies the syntax. To call a function with no arguments using the wrapper:
 
+**Python**
 ```python
 result = daq_utils.call(channel, "Setup.Configure.Apply")
 ```
 
+**C#**
+```csharp
+var result = DaqUtils.Call(channel, "Setup.Configure.Apply");
+```
+
 To call a function with arguments:
 
+**Python**
 ```python
 result = daq_utils.call(channel, "Capabilities.InputRangesWithVoltage", 0xFF, 5000)
 ```
 
+**C#**
+```csharp
+var result = DaqUtils.Call(channel, "Capabilities.InputRangesWithVoltage", (IntegerObject)0xFF, (IntegerObject)5000);
+```
+
 The result object can then be queried for any returned properties. For example:
 
+**Python**
 ```python
 success = result.get_property_value('Success')
+```
+
+**C#**
+```csharp
+var success = result?.Cast<PropertyObject>()?.GetPropertyValue("Success");
 ```
 
 ### Inspecting types
 
 To view what fields/values are available for openDAQ `Enumeration` and `Struct` types, create a `DaqTypeInspector`:
 
+**Python**
 ```python
 inspector = daq_utils.DaqTypeInspector(instance)
 ```
 
+**C#**
+```csharp
+var inspector = new DaqTypeInspector(instance);
+```
+
 To inspect a type:
 
+**Python**
 ```python
 inspector.describe('MSCL_Wireless_AutoCalCompletionFlag')
+```
+
+**C#**
+```csharp
+inspector.Describe("MSCL_Wireless_AutoCalCompletionFlag");
 ```
 
 ### Creating typed values
 
 To create openDAQ typed values such as `Enumerations` and `Structs`, use `DaqTypeFactory`. It handles the type manager and string conversion automatically:
 
+**Python**
 ```python
 daq_types = daq_utils.DaqTypeFactory(instance)
 ```
 
+**C#**
+```csharp
+var daqTypes = new DaqTypeFactory(instance);
+```
+
 #### Creating an enum value
 
-Use `enum()`:
-
+**Python**
 ```python
 voltage = daq_types.enum("MSCL_Wireless_Voltage", "voltage_3000mV")
+```
+
+**C#**
+```csharp
+var voltage = daqTypes.MakeEnum("MSCL_Wireless_Voltage", "voltage_3000mV");
 ```
 
 #### Creating a Struct value
 
 Pass a Python dict with the struct's fields to `struct()`. Python primitives are converted automatically, and openDAQ types such as enumerations are passed through as-is:
 
+**Python**
 ```python
 cmd_info = daq_types.struct(
     "MSCL_Wireless_ShuntCalCmdInfo",
@@ -315,4 +442,19 @@ cmd_info = daq_types.struct(
         "ExcitationVoltage": daq_types.enum("MSCL_Wireless_Voltage", "voltage_1500mV")
     }
 )
+```
+
+**C#**
+```csharp
+var cmdInfo = daqTypes.MakeStruct("MSCL_Wireless_ShuntCalCmdInfo", new Dictionary<string, object>
+{
+    ["UseInternalShunt"] = true,
+    ["NumActiveGauges"] = 1,
+    ["GaugeResistance"] = 350,
+    ["ShuntResistance"] = 100000,
+    ["GaugeFactor"] = 2.0,
+    ["InputRange"] = daqTypes.MakeEnum("MSCL_Wireless_InputRange", "range_14_545mV"),
+    ["HardwareOffset"] = 0,
+    ["ExcitationVoltage"] = daqTypes.MakeEnum("MSCL_Wireless_Voltage", "voltage_1500mV")
+});
 ```

@@ -6,8 +6,14 @@ Overview of how wireless devices are represented in the openDAQ module and the w
 
 Import the wireless submodule to access wireless-specific utilities:
 
+**Python**
 ```python
 import daq_utils.wireless as wireless
+```
+
+**C#**
+```csharp
+using Daq.Utils;
 ```
 
 ## Usage
@@ -24,8 +30,14 @@ For wireless base stations, each connected node is represented as a channel. See
 
 To see all nodes currently discovered by the device:
 
+**Python**
 ```python
 wireless.list_nodes(device)
+```
+
+**C#**
+```csharp
+WirelessUtils.ListNodes(device);
 ```
 
 This will print a table of each node's index and info, for example:
